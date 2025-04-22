@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.ndd.courseshubbackend.pojos;
+package com.courseshubbackend.pojos;
 
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
@@ -18,6 +18,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -26,13 +27,13 @@ import java.util.Date;
  * @author Apelion283
  */
 @Entity
-@Table(name = "test_submission")
+@Table(name = "certificate")
 @NamedQueries({
-    @NamedQuery(name = "TestSubmission.findAll", query = "SELECT t FROM TestSubmission t"),
-    @NamedQuery(name = "TestSubmission.findById", query = "SELECT t FROM TestSubmission t WHERE t.id = :id"),
-    @NamedQuery(name = "TestSubmission.findByScore", query = "SELECT t FROM TestSubmission t WHERE t.score = :score"),
-    @NamedQuery(name = "TestSubmission.findBySubmitDate", query = "SELECT t FROM TestSubmission t WHERE t.submitDate = :submitDate")})
-public class TestSubmission implements Serializable {
+    @NamedQuery(name = "Certificate.findAll", query = "SELECT c FROM Certificate c"),
+    @NamedQuery(name = "Certificate.findById", query = "SELECT c FROM Certificate c WHERE c.id = :id"),
+    @NamedQuery(name = "Certificate.findByCertificateUrl", query = "SELECT c FROM Certificate c WHERE c.certificateUrl = :certificateUrl"),
+    @NamedQuery(name = "Certificate.findByIssueDate", query = "SELECT c FROM Certificate c WHERE c.issueDate = :issueDate")})
+public class Certificate implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -42,31 +43,32 @@ public class TestSubmission implements Serializable {
     private Integer id;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "score")
-    private double score;
+    @Size(min = 1, max = 255)
+    @Column(name = "certificate_url")
+    private String certificateUrl;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "submit_date")
+    @Column(name = "issue_date")
     @Temporal(TemporalType.DATE)
-    private Date submitDate;
-    @JoinColumn(name = "test_id", referencedColumnName = "id")
+    private Date issueDate;
+    @JoinColumn(name = "course_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
-    private Test test;
+    private Course course;
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private User user;
 
-    public TestSubmission() {
+    public Certificate() {
     }
 
-    public TestSubmission(Integer id) {
+    public Certificate(Integer id) {
         this.id = id;
     }
 
-    public TestSubmission(Integer id, double score, Date submitDate) {
+    public Certificate(Integer id, String certificateUrl, Date issueDate) {
         this.id = id;
-        this.score = score;
-        this.submitDate = submitDate;
+        this.certificateUrl = certificateUrl;
+        this.issueDate = issueDate;
     }
 
     public Integer getId() {
@@ -77,28 +79,28 @@ public class TestSubmission implements Serializable {
         this.id = id;
     }
 
-    public double getScore() {
-        return score;
+    public String getCertificateUrl() {
+        return certificateUrl;
     }
 
-    public void setScore(double score) {
-        this.score = score;
+    public void setCertificateUrl(String certificateUrl) {
+        this.certificateUrl = certificateUrl;
     }
 
-    public Date getSubmitDate() {
-        return submitDate;
+    public Date getIssueDate() {
+        return issueDate;
     }
 
-    public void setSubmitDate(Date submitDate) {
-        this.submitDate = submitDate;
+    public void setIssueDate(Date issueDate) {
+        this.issueDate = issueDate;
     }
 
-    public Test getTestId() {
-        return test;
+    public Course getCourseId() {
+        return course;
     }
 
-    public void setTestId(Test testId) {
-        this.test = testId;
+    public void setCourseId(Course courseId) {
+        this.course = courseId;
     }
 
     public User getUserId() {
@@ -119,10 +121,10 @@ public class TestSubmission implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof TestSubmission)) {
+        if (!(object instanceof Certificate)) {
             return false;
         }
-        TestSubmission other = (TestSubmission) object;
+        Certificate other = (Certificate) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -131,7 +133,7 @@ public class TestSubmission implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ndd.courseshubbackend.pojos.TestSubmission[ id=" + id + " ]";
+        return "com.ndd.courseshubbackend.pojos.Certificate[ id=" + id + " ]";
     }
     
 }

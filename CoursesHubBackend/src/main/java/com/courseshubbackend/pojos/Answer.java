@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.ndd.courseshubbackend.pojos;
+package com.courseshubbackend.pojos;
 
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
@@ -11,6 +11,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
@@ -18,6 +19,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -26,12 +28,13 @@ import java.util.Date;
  * @author Apelion283
  */
 @Entity
-@Table(name = "course_user_enroll")
+@Table(name = "answer")
 @NamedQueries({
-    @NamedQuery(name = "CourseUserEnroll.findAll", query = "SELECT c FROM CourseUserEnroll c"),
-    @NamedQuery(name = "CourseUserEnroll.findById", query = "SELECT c FROM CourseUserEnroll c WHERE c.id = :id"),
-    @NamedQuery(name = "CourseUserEnroll.findByEnrollDate", query = "SELECT c FROM CourseUserEnroll c WHERE c.enrollDate = :enrollDate")})
-public class CourseUserEnroll implements Serializable {
+    @NamedQuery(name = "Answer.findAll", query = "SELECT a FROM Answer a"),
+    @NamedQuery(name = "Answer.findById", query = "SELECT a FROM Answer a WHERE a.id = :id"),
+    @NamedQuery(name = "Answer.findByIsCorrect", query = "SELECT a FROM Answer a WHERE a.isCorrect = :isCorrect"),
+    @NamedQuery(name = "Answer.findByCreateDate", query = "SELECT a FROM Answer a WHERE a.createDate = :createDate")})
+public class Answer implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -41,29 +44,35 @@ public class CourseUserEnroll implements Serializable {
     private Integer id;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "enroll_date")
+    @Lob
+    @Size(min = 1, max = 65535)
+    @Column(name = "content")
+    private String content;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "is_correct")
+    private boolean isCorrect;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "create_date")
     @Temporal(TemporalType.DATE)
-    private Date enrollDate;
-    @JoinColumn(name = "course_id", referencedColumnName = "id")
+    private Date createDate;
+    @JoinColumn(name = "question_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
-    private Course course;
-    @JoinColumn(name = "payment_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
-    private Payment payment;
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
-    private User user;
+    private Question question;
 
-    public CourseUserEnroll() {
+    public Answer() {
     }
 
-    public CourseUserEnroll(Integer id) {
+    public Answer(Integer id) {
         this.id = id;
     }
 
-    public CourseUserEnroll(Integer id, Date enrollDate) {
+    public Answer(Integer id, String content, boolean isCorrect, Date createDate) {
         this.id = id;
-        this.enrollDate = enrollDate;
+        this.content = content;
+        this.isCorrect = isCorrect;
+        this.createDate = createDate;
     }
 
     public Integer getId() {
@@ -74,36 +83,36 @@ public class CourseUserEnroll implements Serializable {
         this.id = id;
     }
 
-    public Date getEnrollDate() {
-        return enrollDate;
+    public String getContent() {
+        return content;
     }
 
-    public void setEnrollDate(Date enrollDate) {
-        this.enrollDate = enrollDate;
+    public void setContent(String content) {
+        this.content = content;
     }
 
-    public Course getCourseId() {
-        return course;
+    public boolean getIsCorrect() {
+        return isCorrect;
     }
 
-    public void setCourseId(Course courseId) {
-        this.course = courseId;
+    public void setIsCorrect(boolean isCorrect) {
+        this.isCorrect = isCorrect;
     }
 
-    public Payment getPaymentId() {
-        return payment;
+    public Date getCreateDate() {
+        return createDate;
     }
 
-    public void setPaymentId(Payment paymentId) {
-        this.payment = paymentId;
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
     }
 
-    public User getUserId() {
-        return user;
+    public Question getQuestionId() {
+        return question;
     }
 
-    public void setUserId(User userId) {
-        this.user = userId;
+    public void setQuestionId(Question questionId) {
+        this.question = questionId;
     }
 
     @Override
@@ -116,10 +125,10 @@ public class CourseUserEnroll implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof CourseUserEnroll)) {
+        if (!(object instanceof Answer)) {
             return false;
         }
-        CourseUserEnroll other = (CourseUserEnroll) object;
+        Answer other = (Answer) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -128,7 +137,7 @@ public class CourseUserEnroll implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ndd.courseshubbackend.pojos.CourseUserEnroll[ id=" + id + " ]";
+        return "com.ndd.courseshubbackend.pojos.Answer[ id=" + id + " ]";
     }
     
 }

@@ -2,16 +2,16 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.ndd.courseshubbackend.pojos;
+package com.courseshubbackend.pojos;
 
 import jakarta.persistence.Basic;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
@@ -30,13 +30,13 @@ import java.util.Set;
  * @author Apelion283
  */
 @Entity
-@Table(name = "response")
+@Table(name = "conversation")
 @NamedQueries({
-    @NamedQuery(name = "Response.findAll", query = "SELECT r FROM Response r"),
-    @NamedQuery(name = "Response.findById", query = "SELECT r FROM Response r WHERE r.id = :id"),
-    @NamedQuery(name = "Response.findByCreateDate", query = "SELECT r FROM Response r WHERE r.createDate = :createDate"),
-    @NamedQuery(name = "Response.findByIsTeacherResponse", query = "SELECT r FROM Response r WHERE r.isTeacherResponse = :isTeacherResponse")})
-public class Response implements Serializable {
+    @NamedQuery(name = "Conversation.findAll", query = "SELECT c FROM Conversation c"),
+    @NamedQuery(name = "Conversation.findById", query = "SELECT c FROM Conversation c WHERE c.id = :id"),
+    @NamedQuery(name = "Conversation.findByTopic", query = "SELECT c FROM Conversation c WHERE c.topic = :topic"),
+    @NamedQuery(name = "Conversation.findByCreateDate", query = "SELECT c FROM Conversation c WHERE c.createDate = :createDate")})
+public class Conversation implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -46,40 +46,34 @@ public class Response implements Serializable {
     private Integer id;
     @Basic(optional = false)
     @NotNull
-    @Lob
-    @Size(min = 1, max = 65535)
-    @Column(name = "content")
-    private String content;
+    @Size(min = 1, max = 255)
+    @Column(name = "topic")
+    private String topic;
     @Basic(optional = false)
     @NotNull
     @Column(name = "create_date")
     @Temporal(TemporalType.DATE)
     private Date createDate;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "is_teacher_response")
-    private boolean isTeacherResponse;
-    @JoinColumn(name = "conversation_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
-    private Conversation conversation;
-    @OneToMany(mappedBy = "parentResponse")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "conversation")
     private Set<Response> responseSet;
-    @JoinColumn(name = "parent_response_id", referencedColumnName = "id")
-    @ManyToOne
-    private Response parentResponse;
+    @JoinColumn(name = "lecture_id", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private Lecture lecture;
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private User user;
 
-    public Response() {
+    public Conversation() {
     }
 
-    public Response(Integer id) {
+    public Conversation(Integer id) {
         this.id = id;
     }
 
-    public Response(Integer id, String content, Date createDate, boolean isTeacherResponse) {
+    public Conversation(Integer id, String topic, Date createDate) {
         this.id = id;
-        this.content = content;
+        this.topic = topic;
         this.createDate = createDate;
-        this.isTeacherResponse = isTeacherResponse;
     }
 
     public Integer getId() {
@@ -90,12 +84,12 @@ public class Response implements Serializable {
         this.id = id;
     }
 
-    public String getContent() {
-        return content;
+    public String getTopic() {
+        return topic;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setTopic(String topic) {
+        this.topic = topic;
     }
 
     public Date getCreateDate() {
@@ -106,22 +100,6 @@ public class Response implements Serializable {
         this.createDate = createDate;
     }
 
-    public boolean getIsTeacherResponse() {
-        return isTeacherResponse;
-    }
-
-    public void setIsTeacherResponse(boolean isTeacherResponse) {
-        this.isTeacherResponse = isTeacherResponse;
-    }
-
-    public Conversation getConversationId() {
-        return conversation;
-    }
-
-    public void setConversationId(Conversation conversationId) {
-        this.conversation = conversationId;
-    }
-
     public Set<Response> getResponseSet() {
         return responseSet;
     }
@@ -130,12 +108,20 @@ public class Response implements Serializable {
         this.responseSet = responseSet;
     }
 
-    public Response getParentResponseId() {
-        return parentResponse;
+    public Lecture getLectureId() {
+        return lecture;
     }
 
-    public void setParentResponseId(Response parentResponseId) {
-        this.parentResponse = parentResponseId;
+    public void setLectureId(Lecture lectureId) {
+        this.lecture = lectureId;
+    }
+
+    public User getUserId() {
+        return user;
+    }
+
+    public void setUserId(User userId) {
+        this.user = userId;
     }
 
     @Override
@@ -148,10 +134,10 @@ public class Response implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Response)) {
+        if (!(object instanceof Conversation)) {
             return false;
         }
-        Response other = (Response) object;
+        Conversation other = (Conversation) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -160,7 +146,7 @@ public class Response implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ndd.courseshubbackend.pojos.Response[ id=" + id + " ]";
+        return "com.ndd.courseshubbackend.pojos.Conversation[ id=" + id + " ]";
     }
     
 }

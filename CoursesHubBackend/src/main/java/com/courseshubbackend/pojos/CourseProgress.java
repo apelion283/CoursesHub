@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.ndd.courseshubbackend.pojos;
+package com.courseshubbackend.pojos;
 
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
@@ -23,12 +23,13 @@ import java.io.Serializable;
  * @author Apelion283
  */
 @Entity
-@Table(name = "review_star")
+@Table(name = "course_progress")
 @NamedQueries({
-    @NamedQuery(name = "ReviewStar.findAll", query = "SELECT r FROM ReviewStar r"),
-    @NamedQuery(name = "ReviewStar.findById", query = "SELECT r FROM ReviewStar r WHERE r.id = :id"),
-    @NamedQuery(name = "ReviewStar.findByStar", query = "SELECT r FROM ReviewStar r WHERE r.star = :star")})
-public class ReviewStar implements Serializable {
+    @NamedQuery(name = "CourseProgress.findAll", query = "SELECT c FROM CourseProgress c"),
+    @NamedQuery(name = "CourseProgress.findById", query = "SELECT c FROM CourseProgress c WHERE c.id = :id"),
+    @NamedQuery(name = "CourseProgress.findByProgress", query = "SELECT c FROM CourseProgress c WHERE c.progress = :progress"),
+    @NamedQuery(name = "CourseProgress.findByIsCompleteCourse", query = "SELECT c FROM CourseProgress c WHERE c.isCompleteCourse = :isCompleteCourse")})
+public class CourseProgress implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -38,25 +39,36 @@ public class ReviewStar implements Serializable {
     private Integer id;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "star")
-    private int star;
+    @Column(name = "progress")
+    private double progress;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "is_complete_course")
+    private boolean isCompleteCourse;
+    @JoinColumn(name = "chapter_id", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private Chapter chapter;
     @JoinColumn(name = "course_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Course course;
+    @JoinColumn(name = "lecture_id", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private Lecture lecture;
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private User user;
 
-    public ReviewStar() {
+    public CourseProgress() {
     }
 
-    public ReviewStar(Integer id) {
+    public CourseProgress(Integer id) {
         this.id = id;
     }
 
-    public ReviewStar(Integer id, int star) {
+    public CourseProgress(Integer id, double progress, boolean isCompleteCourse) {
         this.id = id;
-        this.star = star;
+        this.progress = progress;
+        this.isCompleteCourse = isCompleteCourse;
     }
 
     public Integer getId() {
@@ -67,12 +79,28 @@ public class ReviewStar implements Serializable {
         this.id = id;
     }
 
-    public int getStar() {
-        return star;
+    public double getProgress() {
+        return progress;
     }
 
-    public void setStar(int star) {
-        this.star = star;
+    public void setProgress(double progress) {
+        this.progress = progress;
+    }
+
+    public boolean getIsCompleteCourse() {
+        return isCompleteCourse;
+    }
+
+    public void setIsCompleteCourse(boolean isCompleteCourse) {
+        this.isCompleteCourse = isCompleteCourse;
+    }
+
+    public Chapter getChapterId() {
+        return chapter;
+    }
+
+    public void setChapterId(Chapter chapterId) {
+        this.chapter = chapterId;
     }
 
     public Course getCourseId() {
@@ -81,6 +109,14 @@ public class ReviewStar implements Serializable {
 
     public void setCourseId(Course courseId) {
         this.course = courseId;
+    }
+
+    public Lecture getLectureId() {
+        return lecture;
+    }
+
+    public void setLectureId(Lecture lectureId) {
+        this.lecture = lectureId;
     }
 
     public User getUserId() {
@@ -101,10 +137,10 @@ public class ReviewStar implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof ReviewStar)) {
+        if (!(object instanceof CourseProgress)) {
             return false;
         }
-        ReviewStar other = (ReviewStar) object;
+        CourseProgress other = (CourseProgress) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -113,7 +149,7 @@ public class ReviewStar implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ndd.courseshubbackend.pojos.ReviewStar[ id=" + id + " ]";
+        return "com.ndd.courseshubbackend.pojos.CourseProgress[ id=" + id + " ]";
     }
     
 }

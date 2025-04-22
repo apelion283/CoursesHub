@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.ndd.courseshubbackend.pojos;
+package com.courseshubbackend.pojos;
 
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
@@ -15,21 +15,23 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  *
  * @author Apelion283
  */
 @Entity
-@Table(name = "course_progress")
+@Table(name = "course_user_enroll")
 @NamedQueries({
-    @NamedQuery(name = "CourseProgress.findAll", query = "SELECT c FROM CourseProgress c"),
-    @NamedQuery(name = "CourseProgress.findById", query = "SELECT c FROM CourseProgress c WHERE c.id = :id"),
-    @NamedQuery(name = "CourseProgress.findByProgress", query = "SELECT c FROM CourseProgress c WHERE c.progress = :progress"),
-    @NamedQuery(name = "CourseProgress.findByIsCompleteCourse", query = "SELECT c FROM CourseProgress c WHERE c.isCompleteCourse = :isCompleteCourse")})
-public class CourseProgress implements Serializable {
+    @NamedQuery(name = "CourseUserEnroll.findAll", query = "SELECT c FROM CourseUserEnroll c"),
+    @NamedQuery(name = "CourseUserEnroll.findById", query = "SELECT c FROM CourseUserEnroll c WHERE c.id = :id"),
+    @NamedQuery(name = "CourseUserEnroll.findByEnrollDate", query = "SELECT c FROM CourseUserEnroll c WHERE c.enrollDate = :enrollDate")})
+public class CourseUserEnroll implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -39,36 +41,29 @@ public class CourseProgress implements Serializable {
     private Integer id;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "progress")
-    private double progress;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "is_complete_course")
-    private boolean isCompleteCourse;
-    @JoinColumn(name = "chapter_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
-    private Chapter chapter;
+    @Column(name = "enroll_date")
+    @Temporal(TemporalType.DATE)
+    private Date enrollDate;
     @JoinColumn(name = "course_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Course course;
-    @JoinColumn(name = "lecture_id", referencedColumnName = "id")
+    @JoinColumn(name = "payment_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
-    private Lecture lecture;
+    private Payment payment;
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private User user;
 
-    public CourseProgress() {
+    public CourseUserEnroll() {
     }
 
-    public CourseProgress(Integer id) {
+    public CourseUserEnroll(Integer id) {
         this.id = id;
     }
 
-    public CourseProgress(Integer id, double progress, boolean isCompleteCourse) {
+    public CourseUserEnroll(Integer id, Date enrollDate) {
         this.id = id;
-        this.progress = progress;
-        this.isCompleteCourse = isCompleteCourse;
+        this.enrollDate = enrollDate;
     }
 
     public Integer getId() {
@@ -79,28 +74,12 @@ public class CourseProgress implements Serializable {
         this.id = id;
     }
 
-    public double getProgress() {
-        return progress;
+    public Date getEnrollDate() {
+        return enrollDate;
     }
 
-    public void setProgress(double progress) {
-        this.progress = progress;
-    }
-
-    public boolean getIsCompleteCourse() {
-        return isCompleteCourse;
-    }
-
-    public void setIsCompleteCourse(boolean isCompleteCourse) {
-        this.isCompleteCourse = isCompleteCourse;
-    }
-
-    public Chapter getChapterId() {
-        return chapter;
-    }
-
-    public void setChapterId(Chapter chapterId) {
-        this.chapter = chapterId;
+    public void setEnrollDate(Date enrollDate) {
+        this.enrollDate = enrollDate;
     }
 
     public Course getCourseId() {
@@ -111,12 +90,12 @@ public class CourseProgress implements Serializable {
         this.course = courseId;
     }
 
-    public Lecture getLectureId() {
-        return lecture;
+    public Payment getPaymentId() {
+        return payment;
     }
 
-    public void setLectureId(Lecture lectureId) {
-        this.lecture = lectureId;
+    public void setPaymentId(Payment paymentId) {
+        this.payment = paymentId;
     }
 
     public User getUserId() {
@@ -137,10 +116,10 @@ public class CourseProgress implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof CourseProgress)) {
+        if (!(object instanceof CourseUserEnroll)) {
             return false;
         }
-        CourseProgress other = (CourseProgress) object;
+        CourseUserEnroll other = (CourseUserEnroll) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -149,7 +128,7 @@ public class CourseProgress implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ndd.courseshubbackend.pojos.CourseProgress[ id=" + id + " ]";
+        return "com.ndd.courseshubbackend.pojos.CourseUserEnroll[ id=" + id + " ]";
     }
     
 }

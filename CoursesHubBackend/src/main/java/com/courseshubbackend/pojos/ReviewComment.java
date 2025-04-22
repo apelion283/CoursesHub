@@ -2,20 +2,19 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.ndd.courseshubbackend.pojos;
+package com.courseshubbackend.pojos;
 
 import jakarta.persistence.Basic;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -23,22 +22,18 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Set;
 
 /**
  *
  * @author Apelion283
  */
 @Entity
-@Table(name = "payment")
+@Table(name = "review_comment")
 @NamedQueries({
-    @NamedQuery(name = "Payment.findAll", query = "SELECT p FROM Payment p"),
-    @NamedQuery(name = "Payment.findById", query = "SELECT p FROM Payment p WHERE p.id = :id"),
-    @NamedQuery(name = "Payment.findByAmount", query = "SELECT p FROM Payment p WHERE p.amount = :amount"),
-    @NamedQuery(name = "Payment.findByMethod", query = "SELECT p FROM Payment p WHERE p.method = :method"),
-    @NamedQuery(name = "Payment.findByCreateDate", query = "SELECT p FROM Payment p WHERE p.createDate = :createDate"),
-    @NamedQuery(name = "Payment.findByStatus", query = "SELECT p FROM Payment p WHERE p.status = :status")})
-public class Payment implements Serializable {
+    @NamedQuery(name = "ReviewComment.findAll", query = "SELECT r FROM ReviewComment r"),
+    @NamedQuery(name = "ReviewComment.findById", query = "SELECT r FROM ReviewComment r WHERE r.id = :id"),
+    @NamedQuery(name = "ReviewComment.findByCreateDate", query = "SELECT r FROM ReviewComment r WHERE r.createDate = :createDate")})
+public class ReviewComment implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -48,39 +43,33 @@ public class Payment implements Serializable {
     private Integer id;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "amount")
-    private double amount;
-    @Size(max = 50)
-    @Column(name = "method")
-    private String method;
+    @Lob
+    @Size(min = 1, max = 65535)
+    @Column(name = "comment")
+    private String comment;
     @Basic(optional = false)
     @NotNull
     @Column(name = "create_date")
     @Temporal(TemporalType.DATE)
     private Date createDate;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 50)
-    @Column(name = "status")
-    private String status;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "payment")
-    private Set<CourseUserEnroll> courseUserEnrollSet;
+    @JoinColumn(name = "course_id", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private Course course;
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private User user;
 
-    public Payment() {
+    public ReviewComment() {
     }
 
-    public Payment(Integer id) {
+    public ReviewComment(Integer id) {
         this.id = id;
     }
 
-    public Payment(Integer id, double amount, Date createDate, String status) {
+    public ReviewComment(Integer id, String comment, Date createDate) {
         this.id = id;
-        this.amount = amount;
+        this.comment = comment;
         this.createDate = createDate;
-        this.status = status;
     }
 
     public Integer getId() {
@@ -91,20 +80,12 @@ public class Payment implements Serializable {
         this.id = id;
     }
 
-    public double getAmount() {
-        return amount;
+    public String getComment() {
+        return comment;
     }
 
-    public void setAmount(double amount) {
-        this.amount = amount;
-    }
-
-    public String getMethod() {
-        return method;
-    }
-
-    public void setMethod(String method) {
-        this.method = method;
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
     public Date getCreateDate() {
@@ -115,20 +96,12 @@ public class Payment implements Serializable {
         this.createDate = createDate;
     }
 
-    public String getStatus() {
-        return status;
+    public Course getCourseId() {
+        return course;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public Set<CourseUserEnroll> getCourseUserEnrollSet() {
-        return courseUserEnrollSet;
-    }
-
-    public void setCourseUserEnrollSet(Set<CourseUserEnroll> courseUserEnrollSet) {
-        this.courseUserEnrollSet = courseUserEnrollSet;
+    public void setCourseId(Course courseId) {
+        this.course = courseId;
     }
 
     public User getUserId() {
@@ -149,10 +122,10 @@ public class Payment implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Payment)) {
+        if (!(object instanceof ReviewComment)) {
             return false;
         }
-        Payment other = (Payment) object;
+        ReviewComment other = (ReviewComment) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -161,7 +134,7 @@ public class Payment implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ndd.courseshubbackend.pojos.Payment[ id=" + id + " ]";
+        return "com.ndd.courseshubbackend.pojos.ReviewComment[ id=" + id + " ]";
     }
     
 }

@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.ndd.courseshubbackend.pojos;
+package com.courseshubbackend.pojos;
 
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
@@ -11,7 +11,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
@@ -19,7 +18,6 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -28,13 +26,13 @@ import java.util.Date;
  * @author Apelion283
  */
 @Entity
-@Table(name = "answer")
+@Table(name = "test_submission")
 @NamedQueries({
-    @NamedQuery(name = "Answer.findAll", query = "SELECT a FROM Answer a"),
-    @NamedQuery(name = "Answer.findById", query = "SELECT a FROM Answer a WHERE a.id = :id"),
-    @NamedQuery(name = "Answer.findByIsCorrect", query = "SELECT a FROM Answer a WHERE a.isCorrect = :isCorrect"),
-    @NamedQuery(name = "Answer.findByCreateDate", query = "SELECT a FROM Answer a WHERE a.createDate = :createDate")})
-public class Answer implements Serializable {
+    @NamedQuery(name = "TestSubmission.findAll", query = "SELECT t FROM TestSubmission t"),
+    @NamedQuery(name = "TestSubmission.findById", query = "SELECT t FROM TestSubmission t WHERE t.id = :id"),
+    @NamedQuery(name = "TestSubmission.findByScore", query = "SELECT t FROM TestSubmission t WHERE t.score = :score"),
+    @NamedQuery(name = "TestSubmission.findBySubmitDate", query = "SELECT t FROM TestSubmission t WHERE t.submitDate = :submitDate")})
+public class TestSubmission implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -44,35 +42,31 @@ public class Answer implements Serializable {
     private Integer id;
     @Basic(optional = false)
     @NotNull
-    @Lob
-    @Size(min = 1, max = 65535)
-    @Column(name = "content")
-    private String content;
+    @Column(name = "score")
+    private double score;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "is_correct")
-    private boolean isCorrect;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "create_date")
+    @Column(name = "submit_date")
     @Temporal(TemporalType.DATE)
-    private Date createDate;
-    @JoinColumn(name = "question_id", referencedColumnName = "id")
+    private Date submitDate;
+    @JoinColumn(name = "test_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
-    private Question question;
+    private Test test;
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private User user;
 
-    public Answer() {
+    public TestSubmission() {
     }
 
-    public Answer(Integer id) {
+    public TestSubmission(Integer id) {
         this.id = id;
     }
 
-    public Answer(Integer id, String content, boolean isCorrect, Date createDate) {
+    public TestSubmission(Integer id, double score, Date submitDate) {
         this.id = id;
-        this.content = content;
-        this.isCorrect = isCorrect;
-        this.createDate = createDate;
+        this.score = score;
+        this.submitDate = submitDate;
     }
 
     public Integer getId() {
@@ -83,36 +77,36 @@ public class Answer implements Serializable {
         this.id = id;
     }
 
-    public String getContent() {
-        return content;
+    public double getScore() {
+        return score;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setScore(double score) {
+        this.score = score;
     }
 
-    public boolean getIsCorrect() {
-        return isCorrect;
+    public Date getSubmitDate() {
+        return submitDate;
     }
 
-    public void setIsCorrect(boolean isCorrect) {
-        this.isCorrect = isCorrect;
+    public void setSubmitDate(Date submitDate) {
+        this.submitDate = submitDate;
     }
 
-    public Date getCreateDate() {
-        return createDate;
+    public Test getTestId() {
+        return test;
     }
 
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
+    public void setTestId(Test testId) {
+        this.test = testId;
     }
 
-    public Question getQuestionId() {
-        return question;
+    public User getUserId() {
+        return user;
     }
 
-    public void setQuestionId(Question questionId) {
-        this.question = questionId;
+    public void setUserId(User userId) {
+        this.user = userId;
     }
 
     @Override
@@ -125,10 +119,10 @@ public class Answer implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Answer)) {
+        if (!(object instanceof TestSubmission)) {
             return false;
         }
-        Answer other = (Answer) object;
+        TestSubmission other = (TestSubmission) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -137,7 +131,7 @@ public class Answer implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ndd.courseshubbackend.pojos.Answer[ id=" + id + " ]";
+        return "com.ndd.courseshubbackend.pojos.TestSubmission[ id=" + id + " ]";
     }
     
 }

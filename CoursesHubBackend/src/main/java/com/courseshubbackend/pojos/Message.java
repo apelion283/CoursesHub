@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.ndd.courseshubbackend.pojos;
+package com.courseshubbackend.pojos;
 
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
@@ -16,24 +16,20 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  *
  * @author Apelion283
  */
 @Entity
-@Table(name = "review_comment")
+@Table(name = "message")
 @NamedQueries({
-    @NamedQuery(name = "ReviewComment.findAll", query = "SELECT r FROM ReviewComment r"),
-    @NamedQuery(name = "ReviewComment.findById", query = "SELECT r FROM ReviewComment r WHERE r.id = :id"),
-    @NamedQuery(name = "ReviewComment.findByCreateDate", query = "SELECT r FROM ReviewComment r WHERE r.createDate = :createDate")})
-public class ReviewComment implements Serializable {
+    @NamedQuery(name = "Message.findAll", query = "SELECT m FROM Message m"),
+    @NamedQuery(name = "Message.findById", query = "SELECT m FROM Message m WHERE m.id = :id")})
+public class Message implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -45,31 +41,25 @@ public class ReviewComment implements Serializable {
     @NotNull
     @Lob
     @Size(min = 1, max = 65535)
-    @Column(name = "comment")
-    private String comment;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "create_date")
-    @Temporal(TemporalType.DATE)
-    private Date createDate;
-    @JoinColumn(name = "course_id", referencedColumnName = "id")
+    @Column(name = "message")
+    private String message;
+    @JoinColumn(name = "chat_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
-    private Course course;
+    private Chat chat;
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private User user;
 
-    public ReviewComment() {
+    public Message() {
     }
 
-    public ReviewComment(Integer id) {
+    public Message(Integer id) {
         this.id = id;
     }
 
-    public ReviewComment(Integer id, String comment, Date createDate) {
+    public Message(Integer id, String message) {
         this.id = id;
-        this.comment = comment;
-        this.createDate = createDate;
+        this.message = message;
     }
 
     public Integer getId() {
@@ -80,28 +70,20 @@ public class ReviewComment implements Serializable {
         this.id = id;
     }
 
-    public String getComment() {
-        return comment;
+    public String getMessage() {
+        return message;
     }
 
-    public void setComment(String comment) {
-        this.comment = comment;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
-    public Date getCreateDate() {
-        return createDate;
+    public Chat getChatId() {
+        return chat;
     }
 
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
-
-    public Course getCourseId() {
-        return course;
-    }
-
-    public void setCourseId(Course courseId) {
-        this.course = courseId;
+    public void setChatId(Chat chatId) {
+        this.chat = chatId;
     }
 
     public User getUserId() {
@@ -122,10 +104,10 @@ public class ReviewComment implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof ReviewComment)) {
+        if (!(object instanceof Message)) {
             return false;
         }
-        ReviewComment other = (ReviewComment) object;
+        Message other = (Message) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -134,7 +116,7 @@ public class ReviewComment implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ndd.courseshubbackend.pojos.ReviewComment[ id=" + id + " ]";
+        return "com.ndd.courseshubbackend.pojos.Message[ id=" + id + " ]";
     }
     
 }

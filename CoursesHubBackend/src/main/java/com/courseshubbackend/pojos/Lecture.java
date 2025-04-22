@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.ndd.courseshubbackend.pojos;
+package com.courseshubbackend.pojos;
 
 import jakarta.persistence.Basic;
 import jakarta.persistence.CascadeType;
@@ -12,7 +12,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
@@ -31,14 +30,16 @@ import java.util.Set;
  * @author Apelion283
  */
 @Entity
-@Table(name = "chapter")
+@Table(name = "lecture")
 @NamedQueries({
-    @NamedQuery(name = "Chapter.findAll", query = "SELECT c FROM Chapter c"),
-    @NamedQuery(name = "Chapter.findById", query = "SELECT c FROM Chapter c WHERE c.id = :id"),
-    @NamedQuery(name = "Chapter.findByName", query = "SELECT c FROM Chapter c WHERE c.name = :name"),
-    @NamedQuery(name = "Chapter.findByChapterOrder", query = "SELECT c FROM Chapter c WHERE c.chapterOrder = :chapterOrder"),
-    @NamedQuery(name = "Chapter.findByCreateDate", query = "SELECT c FROM Chapter c WHERE c.createDate = :createDate")})
-public class Chapter implements Serializable {
+    @NamedQuery(name = "Lecture.findAll", query = "SELECT l FROM Lecture l"),
+    @NamedQuery(name = "Lecture.findById", query = "SELECT l FROM Lecture l WHERE l.id = :id"),
+    @NamedQuery(name = "Lecture.findByName", query = "SELECT l FROM Lecture l WHERE l.name = :name"),
+    @NamedQuery(name = "Lecture.findByVideoUrl", query = "SELECT l FROM Lecture l WHERE l.videoUrl = :videoUrl"),
+    @NamedQuery(name = "Lecture.findByDocumentUrl", query = "SELECT l FROM Lecture l WHERE l.documentUrl = :documentUrl"),
+    @NamedQuery(name = "Lecture.findByLectureOrder", query = "SELECT l FROM Lecture l WHERE l.lectureOrder = :lectureOrder"),
+    @NamedQuery(name = "Lecture.findByCreateDate", query = "SELECT l FROM Lecture l WHERE l.createDate = :createDate")})
+public class Lecture implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -51,40 +52,40 @@ public class Chapter implements Serializable {
     @Size(min = 1, max = 255)
     @Column(name = "name")
     private String name;
-    @Lob
-    @Size(max = 65535)
-    @Column(name = "description")
-    private String description;
+    @Size(max = 255)
+    @Column(name = "video_url")
+    private String videoUrl;
+    @Size(max = 255)
+    @Column(name = "document_url")
+    private String documentUrl;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "chapter_order")
-    private int chapterOrder;
+    @Column(name = "lecture_order")
+    private int lectureOrder;
     @Basic(optional = false)
     @NotNull
     @Column(name = "create_date")
     @Temporal(TemporalType.DATE)
     private Date createDate;
-    @JoinColumn(name = "course_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
-    private Course courseId;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "chapter")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "lecture")
     private Set<CourseProgress> courseProgressSet;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "chapter")
-    private Set<Test> testSet;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "chapter")
-    private Set<Lecture> lectureSet;
+    @JoinColumn(name = "chapter_id", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private Chapter chapter;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "lecture")
+    private Set<Conversation> conversationSet;
 
-    public Chapter() {
+    public Lecture() {
     }
 
-    public Chapter(Integer id) {
+    public Lecture(Integer id) {
         this.id = id;
     }
 
-    public Chapter(Integer id, String name, int chapterOrder, Date createDate) {
+    public Lecture(Integer id, String name, int lectureOrder, Date createDate) {
         this.id = id;
         this.name = name;
-        this.chapterOrder = chapterOrder;
+        this.lectureOrder = lectureOrder;
         this.createDate = createDate;
     }
 
@@ -104,20 +105,28 @@ public class Chapter implements Serializable {
         this.name = name;
     }
 
-    public String getDescription() {
-        return description;
+    public String getVideoUrl() {
+        return videoUrl;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setVideoUrl(String videoUrl) {
+        this.videoUrl = videoUrl;
     }
 
-    public int getChapterOrder() {
-        return chapterOrder;
+    public String getDocumentUrl() {
+        return documentUrl;
     }
 
-    public void setChapterOrder(int chapterOrder) {
-        this.chapterOrder = chapterOrder;
+    public void setDocumentUrl(String documentUrl) {
+        this.documentUrl = documentUrl;
+    }
+
+    public int getLectureOrder() {
+        return lectureOrder;
+    }
+
+    public void setLectureOrder(int lectureOrder) {
+        this.lectureOrder = lectureOrder;
     }
 
     public Date getCreateDate() {
@@ -128,14 +137,6 @@ public class Chapter implements Serializable {
         this.createDate = createDate;
     }
 
-    public Course getCourseId() {
-        return courseId;
-    }
-
-    public void setCourseId(Course courseId) {
-        this.courseId = courseId;
-    }
-
     public Set<CourseProgress> getCourseProgressSet() {
         return courseProgressSet;
     }
@@ -144,20 +145,20 @@ public class Chapter implements Serializable {
         this.courseProgressSet = courseProgressSet;
     }
 
-    public Set<Test> getTestSet() {
-        return testSet;
+    public Chapter getChapterId() {
+        return chapter;
     }
 
-    public void setTestSet(Set<Test> testSet) {
-        this.testSet = testSet;
+    public void setChapterId(Chapter chapterId) {
+        this.chapter = chapterId;
     }
 
-    public Set<Lecture> getLectureSet() {
-        return lectureSet;
+    public Set<Conversation> getConversationSet() {
+        return conversationSet;
     }
 
-    public void setLectureSet(Set<Lecture> lectureSet) {
-        this.lectureSet = lectureSet;
+    public void setConversationSet(Set<Conversation> conversationSet) {
+        this.conversationSet = conversationSet;
     }
 
     @Override
@@ -170,10 +171,10 @@ public class Chapter implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Chapter)) {
+        if (!(object instanceof Lecture)) {
             return false;
         }
-        Chapter other = (Chapter) object;
+        Lecture other = (Lecture) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -182,7 +183,7 @@ public class Chapter implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ndd.courseshubbackend.pojos.Chapter[ id=" + id + " ]";
+        return "com.ndd.courseshubbackend.pojos.Lecture[ id=" + id + " ]";
     }
     
 }
