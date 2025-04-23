@@ -1,4 +1,4 @@
-package com.ndd.courseshubbackend;
+package com.courseshubbackend;
 
 import jakarta.ws.rs.ApplicationPath;
 import jakarta.ws.rs.core.Application;

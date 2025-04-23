@@ -1,7 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence version="3.0" xmlns="https://jakarta.ee/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd">
-    <!-- Define Persistence Unit -->
-    <persistence-unit name="my_persistence_unit">
-        
-    </persistence-unit>
+  <!-- Define Persistence Unit -->
+  <persistence-unit name="my_persistence_unit">
+    <class>com.courseshubbackend.pojos.Lecture</class>
+    <class>com.courseshubbackend.pojos.CourseUserEnroll</class>
+    <class>com.courseshubbackend.pojos.CourseProgress</class>
+    <class>com.courseshubbackend.pojos.Chapter</class>
+    <class>com.courseshubbackend.pojos.Test</class>
+    <class>com.courseshubbackend.pojos.Conversation</class>
+    <class>com.courseshubbackend.pojos.Question</class>
+    <class>com.courseshubbackend.pojos.Chat</class>
+    <class>com.courseshubbackend.pojos.Response</class>
+    <class>com.courseshubbackend.pojos.ReviewComment</class>
+    <class>com.courseshubbackend.pojos.Answer</class>
+    <class>com.courseshubbackend.pojos.Course</class>
+    <class>com.courseshubbackend.pojos.Message</class>
+    <class>com.courseshubbackend.pojos.TestSubmission</class>
+    <class>com.courseshubbackend.pojos.User</class>
+    <class>com.courseshubbackend.pojos.Payment</class>
+    <class>com.courseshubbackend.pojos.ReviewStar</class>
+    <class>com.courseshubbackend.pojos.Certificate</class>
+  </persistence-unit>
 </persistence>
