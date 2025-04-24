@@ -19,15 +19,20 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableWebMvc
 @EnableTransactionManagement
 @ComponentScan(basePackages={
-    "com.ndd.courseshubbackend.controllers",
-    "com.ndd.courseshubbackend.repositories",
-    "com.ndd.courseshubbackend.services"
+    "com.courseshubbackend.controllers",
+    "com.courseshubbackend.repositories",
+    "com.courseshubbackend.services"
 })
 public class WebAppContextConfig implements WebMvcConfigurer{
 
     @Override
     public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
         configurer.enable();
+    }
+
+    @Override
+    public void addResourceHandlers(org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/**").addResourceLocations("classpath:/static/");
     }
     
 }
