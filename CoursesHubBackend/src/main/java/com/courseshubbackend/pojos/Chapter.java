@@ -66,7 +66,7 @@ public class Chapter implements Serializable {
     private Date createDate;
     @JoinColumn(name = "course_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
-    private Course courseId;
+    private Course course;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "chapter")
     private Set<CourseProgress> courseProgressSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "chapter")
@@ -128,12 +128,12 @@ public class Chapter implements Serializable {
         this.createDate = createDate;
     }
 
-    public Course getCourseId() {
-        return courseId;
+    public Course getCourse() {
+        return course;
     }
 
-    public void setCourseId(Course courseId) {
-        this.courseId = courseId;
+    public void setCourse(Course course) {
+        this.course = course;
     }
 
     public Set<CourseProgress> getCourseProgressSet() {
