@@ -27,8 +27,10 @@ buildSrc/build
 spring-test/test-output/
 
 # Maven artifacts
-pom.xml
 /target/
+
+#Netbean
+nb-configuration.xml
 
 # Eclipse artifacts, including WTP generated manifests
 bin
