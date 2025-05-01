@@ -38,7 +38,7 @@ import java.util.Set;
     @NamedQuery(name = "Lecture.findByVideoUrl", query = "SELECT l FROM Lecture l WHERE l.videoUrl = :videoUrl"),
     @NamedQuery(name = "Lecture.findByDocumentUrl", query = "SELECT l FROM Lecture l WHERE l.documentUrl = :documentUrl"),
     @NamedQuery(name = "Lecture.findByLectureOrder", query = "SELECT l FROM Lecture l WHERE l.lectureOrder = :lectureOrder"),
-    @NamedQuery(name = "Lecture.findByCreateDate", query = "SELECT l FROM Lecture l WHERE l.createDate = :createDate")})
+    @NamedQuery(name = "Lecture.findByCreateDate", query = "SELECT l FROM Lecture l WHERE l.createdDate = :createDate")})
 public class Lecture implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -64,9 +64,9 @@ public class Lecture implements Serializable {
     private int lectureOrder;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "create_date")
+    @Column(name = "created_date")
     @Temporal(TemporalType.DATE)
-    private Date createDate;
+    private Date createdDate;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "lecture")
     private Set<CourseProgress> courseProgressSet;
     @JoinColumn(name = "chapter_id", referencedColumnName = "id")
@@ -82,11 +82,11 @@ public class Lecture implements Serializable {
         this.id = id;
     }
 
-    public Lecture(Integer id, String name, int lectureOrder, Date createDate) {
+    public Lecture(Integer id, String name, int lectureOrder, Date createdDate) {
         this.id = id;
         this.name = name;
         this.lectureOrder = lectureOrder;
-        this.createDate = createDate;
+        this.createdDate = createdDate;
     }
 
     public Integer getId() {
@@ -129,12 +129,12 @@ public class Lecture implements Serializable {
         this.lectureOrder = lectureOrder;
     }
 
-    public Date getCreateDate() {
-        return createDate;
+    public Date getCreatedDate() {
+        return createdDate;
     }
 
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
     }
 
     public Set<CourseProgress> getCourseProgressSet() {

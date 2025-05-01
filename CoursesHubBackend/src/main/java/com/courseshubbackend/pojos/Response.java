@@ -34,7 +34,7 @@ import java.util.Set;
 @NamedQueries({
     @NamedQuery(name = "Response.findAll", query = "SELECT r FROM Response r"),
     @NamedQuery(name = "Response.findById", query = "SELECT r FROM Response r WHERE r.id = :id"),
-    @NamedQuery(name = "Response.findByCreateDate", query = "SELECT r FROM Response r WHERE r.createDate = :createDate"),
+    @NamedQuery(name = "Response.findByCreateDate", query = "SELECT r FROM Response r WHERE r.createdDate = :createDate"),
     @NamedQuery(name = "Response.findByIsTeacherResponse", query = "SELECT r FROM Response r WHERE r.isTeacherResponse = :isTeacherResponse")})
 public class Response implements Serializable {
 
@@ -52,9 +52,9 @@ public class Response implements Serializable {
     private String content;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "create_date")
+    @Column(name = "created_date")
     @Temporal(TemporalType.DATE)
-    private Date createDate;
+    private Date createdDate;
     @Basic(optional = false)
     @NotNull
     @Column(name = "is_teacher_response")
@@ -75,10 +75,10 @@ public class Response implements Serializable {
         this.id = id;
     }
 
-    public Response(Integer id, String content, Date createDate, boolean isTeacherResponse) {
+    public Response(Integer id, String content, Date createdDate, boolean isTeacherResponse) {
         this.id = id;
         this.content = content;
-        this.createDate = createDate;
+        this.createdDate = createdDate;
         this.isTeacherResponse = isTeacherResponse;
     }
 
@@ -98,12 +98,12 @@ public class Response implements Serializable {
         this.content = content;
     }
 
-    public Date getCreateDate() {
-        return createDate;
+    public Date getCreatedDate() {
+        return createdDate;
     }
 
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
     }
 
     public boolean getIsTeacherResponse() {

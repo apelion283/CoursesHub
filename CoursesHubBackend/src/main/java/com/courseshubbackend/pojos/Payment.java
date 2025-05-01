@@ -36,7 +36,7 @@ import java.util.Set;
     @NamedQuery(name = "Payment.findById", query = "SELECT p FROM Payment p WHERE p.id = :id"),
     @NamedQuery(name = "Payment.findByAmount", query = "SELECT p FROM Payment p WHERE p.amount = :amount"),
     @NamedQuery(name = "Payment.findByMethod", query = "SELECT p FROM Payment p WHERE p.method = :method"),
-    @NamedQuery(name = "Payment.findByCreateDate", query = "SELECT p FROM Payment p WHERE p.createDate = :createDate"),
+    @NamedQuery(name = "Payment.findByCreateDate", query = "SELECT p FROM Payment p WHERE p.createdDate = :createDate"),
     @NamedQuery(name = "Payment.findByStatus", query = "SELECT p FROM Payment p WHERE p.status = :status")})
 public class Payment implements Serializable {
 
@@ -55,9 +55,9 @@ public class Payment implements Serializable {
     private String method;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "create_date")
+    @Column(name = "created_date")
     @Temporal(TemporalType.DATE)
-    private Date createDate;
+    private Date createdDate;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 50)
@@ -76,10 +76,10 @@ public class Payment implements Serializable {
         this.id = id;
     }
 
-    public Payment(Integer id, double amount, Date createDate, String status) {
+    public Payment(Integer id, double amount, Date createdDate, String status) {
         this.id = id;
         this.amount = amount;
-        this.createDate = createDate;
+        this.createdDate = createdDate;
         this.status = status;
     }
 
@@ -107,12 +107,12 @@ public class Payment implements Serializable {
         this.method = method;
     }
 
-    public Date getCreateDate() {
-        return createDate;
+    public Date getCreatedDate() {
+        return createdDate;
     }
 
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
     }
 
     public String getStatus() {

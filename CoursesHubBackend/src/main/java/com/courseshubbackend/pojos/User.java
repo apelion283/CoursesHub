@@ -40,7 +40,7 @@ import java.util.Set;
     @NamedQuery(name = "User.findByPassword", query = "SELECT u FROM User u WHERE u.password = :password"),
     @NamedQuery(name = "User.findByPhoneNumber", query = "SELECT u FROM User u WHERE u.phoneNumber = :phoneNumber"),
     @NamedQuery(name = "User.findByGender", query = "SELECT u FROM User u WHERE u.gender = :gender"),
-    @NamedQuery(name = "User.findByCreateDate", query = "SELECT u FROM User u WHERE u.createDate = :createDate")})
+    @NamedQuery(name = "User.findByCreateDate", query = "SELECT u FROM User u WHERE u.createdDate = :createDate")})
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -90,9 +90,9 @@ public class User implements Serializable {
     private String address;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "create_date")
+    @Column(name = "created_date")
     @Temporal(TemporalType.DATE)
-    private Date createDate;
+    private Date createdDate;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private Set<CourseProgress> courseProgressSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
@@ -119,7 +119,7 @@ public class User implements Serializable {
         this.id = id;
     }
 
-    public User(Integer id, String fullName, String email, String userRole, String username, String password, String phoneNumber, boolean gender, Date createDate) {
+    public User(Integer id, String fullName, String email, String userRole, String username, String password, String phoneNumber, boolean gender, Date createdDate) {
         this.id = id;
         this.fullName = fullName;
         this.email = email;
@@ -128,7 +128,7 @@ public class User implements Serializable {
         this.password = password;
         this.phoneNumber = phoneNumber;
         this.gender = gender;
-        this.createDate = createDate;
+        this.createdDate = createdDate;
     }
 
     public Integer getId() {
@@ -203,12 +203,12 @@ public class User implements Serializable {
         this.address = address;
     }
 
-    public Date getCreateDate() {
-        return createDate;
+    public Date getCreatedDate() {
+        return createdDate;
     }
 
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
     }
 
     public Set<CourseProgress> getCourseProgressSet() {
