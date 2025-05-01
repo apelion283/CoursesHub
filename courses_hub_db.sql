@@ -26,7 +26,7 @@ CREATE TABLE `answer` (
   `id` int NOT NULL AUTO_INCREMENT,
   `content` text NOT NULL,
   `is_correct` tinyint(1) NOT NULL,
-  `create_date` date NOT NULL,
+  `created_date` date NOT NULL,
   `question_id` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_answer_question` (`question_id`),
@@ -42,6 +42,33 @@ LOCK TABLES `answer` WRITE;
 /*!40000 ALTER TABLE `answer` DISABLE KEYS */;
 INSERT INTO `answer` VALUES (1,'Microsoft',0,'2024-03-20',1),(2,'Sun Microsystems',1,'2024-03-20',1),(3,'Google',0,'2024-03-20',1),(4,'Apple',0,'2024-03-20',1),(5,'int',0,'2024-03-20',2),(6,'float',0,'2024-03-20',2),(7,'boolean',0,'2024-03-20',2),(8,'string[]',1,'2024-03-20',2);
 /*!40000 ALTER TABLE `answer` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `category`
+--
+
+DROP TABLE IF EXISTS `category`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `category` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL,
+  `description` text,
+  `is_active` tinyint(1) DEFAULT '1',
+  `created_date` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `category`
+--
+
+LOCK TABLES `category` WRITE;
+/*!40000 ALTER TABLE `category` DISABLE KEYS */;
+INSERT INTO `category` VALUES (1,'Âm nhạc','Các khóa học về nhạc lý, nhạc cụ, thu âm, và sản xuất âm thanh',1,'2025-05-01 21:27:57'),(2,'Lập trình','Các khóa học lập trình web, mobile, backend, và công nghệ phần mềm',1,'2025-05-01 21:27:57'),(3,'Dữ liệu','Học phân tích dữ liệu, khoa học dữ liệu và trí tuệ nhân tạo',1,'2025-05-01 21:27:57'),(4,'Thiết kế','Thiết kế đồ họa, UI/UX, và các công cụ sáng tạo',1,'2025-05-01 21:27:57'),(5,'Kỹ năng mềm','Phát triển bản thân, giao tiếp, làm việc nhóm và tư duy phản biện',1,'2025-05-01 21:27:57'),(6,'Đầu tư','Tài chính cá nhân, chứng khoán, bất động sản, và crypto',1,'2025-05-01 21:27:57'),(7,'Marketing','Tiếp thị số, xây dựng thương hiệu, quảng cáo và truyền thông',1,'2025-05-01 21:27:57'),(8,'Tin học','Sử dụng máy tính, Word, Excel, PowerPoint và các phần mềm văn phòng',1,'2025-05-01 21:27:57'),(9,'Quay dựng','Quay phim, dựng video, hậu kỳ và kỹ thuật hình ảnh',1,'2025-05-01 21:27:57'),(10,'Nấu ăn','Học cách nấu các món ăn gia đình, dinh dưỡng và ngon miệng',1,'2025-05-01 21:35:46'),(11,'Yoga','Các bài tập yoga giúp cải thiện sức khỏe, thư giãn và giảm căng thẳng',1,'2025-05-01 21:35:46');
+/*!40000 ALTER TABLE `category` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -87,7 +114,7 @@ CREATE TABLE `chapter` (
   `name` varchar(255) NOT NULL,
   `description` text,
   `chapter_order` int NOT NULL,
-  `create_date` date NOT NULL,
+  `created_date` date NOT NULL,
   `course_id` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_chapter_course` (`course_id`),
@@ -138,7 +165,7 @@ DROP TABLE IF EXISTS `conversation`;
 CREATE TABLE `conversation` (
   `id` int NOT NULL AUTO_INCREMENT,
   `topic` varchar(255) NOT NULL,
-  `create_date` date NOT NULL,
+  `created_date` date NOT NULL,
   `user_id` int NOT NULL,
   `lecture_id` int NOT NULL,
   PRIMARY KEY (`id`),
@@ -171,10 +198,14 @@ CREATE TABLE `course` (
   `name` varchar(255) NOT NULL,
   `description` text,
   `price` int NOT NULL,
-  `avearage_star` double NOT NULL,
-  `create_date` date NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `average_star` double NOT NULL,
+  `created_date` date NOT NULL,
+  `image_url` text NOT NULL,
+  `category_id` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_category` (`category_id`),
+  CONSTRAINT `fk_category` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -183,7 +214,7 @@ CREATE TABLE `course` (
 
 LOCK TABLES `course` WRITE;
 /*!40000 ALTER TABLE `course` DISABLE KEYS */;
-INSERT INTO `course` VALUES (1,'Lập trình Java','Khóa học Java cơ bản đến nâng cao',500000,4.5,'2024-03-20'),(2,'Lập trình Web','Khóa học HTML, CSS, JavaScript',300000,4.2,'2024-03-20');
+INSERT INTO `course` VALUES (1,'Lập trình Java','Khóa học Java cơ bản đến nâng cao',500000,4.5,'2024-03-20','https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTvsQg3AGjuKiyHABoc08EQDovwyokYOI119Q&s',2),(2,'Lập trình Web','Khóa học HTML, CSS, JavaScript',300000,4.2,'2024-03-20','https://vtiacademy.edu.vn/upload/images/lap-trinh-web.jpg',2),(3,'Marketing Online Tổng Quan','Cung cấp cái nhìn toàn diện về các kênh marketing online hiệu quả nhất hiện nay.',799000,4.5,'2023-02-20','https://placehold.co/600x400/blue/white?text=Marketing+Online',7),(4,'Tiếng Anh Giao Tiếp Cho Người Đi Làm','Cải thiện kỹ năng nghe, nói, đọc, viết tiếng Anh trong môi trường công sở.',650000,4.8,'2022-11-10','https://placehold.co/600x400/green/white?text=Tiếng+Anh+Công+Sở',5),(5,'Thiết Kế Đồ Họa với Photoshop','Học cách sử dụng thành thạo Adobe Photoshop để thiết kế banner, poster, chỉnh sửa ảnh.',899000,4.6,'2023-03-05','https://placehold.co/600x400/red/white?text=Photoshop+Design',4),(6,'Quản Lý Dự Án Chuyên Nghiệp','Trang bị kiến thức và kỹ năng quản lý dự án theo chuẩn quốc tế PMI.',1200000,4.9,'2023-04-12','https://placehold.co/600x400/purple/white?text=Project+Management',5),(7,'Kỹ Năng Mềm Thiết Yếu','Phát triển các kỹ năng mềm quan trọng như giao tiếp, làm việc nhóm, giải quyết vấn đề.',399000,4.4,'2022-09-25','https://placehold.co/600x400/teal/white?text=Kỹ+Năng+Mềm',5),(8,'Đầu Tư Chứng Khoán Cho Người Mới','Hướng dẫn các bước cơ bản để tham gia thị trường chứng khoán một cách an toàn và hiệu quả.',550000,4.7,'2023-05-18','https://placehold.co/600x400/brown/white?text=Chứng+Khoán+F0',6),(9,'Nấu Ăn Gia Đình Cơ Bản','Học cách chế biến các món ăn ngon, đơn giản, dinh dưỡng cho bữa cơm gia đình.',350000,4.6,'2023-06-01','https://placehold.co/600x400/pink/white?text=Nấu+Ăn+Gia+Đình',10),(10,'Yoga Tại Nhà Cho Người Bận Rộn','Các bài tập yoga đơn giản, có thể thực hiện tại nhà để cải thiện sức khỏe và giảm căng thẳng.',450000,4.8,'2023-07-11','https://placehold.co/600x400/cyan/white?text=Yoga+Tại+Nhà',11),(11,'Lập Trình Python Từ A Đến Z','Khóa học đầy đủ về Python, từ cú pháp cơ bản đến ứng dụng thực tế.',999000,4.9,'2023-08-22','https://placehold.co/600x400/lime/white?text=Python+A-Z',2),(12,'Content Marketing Hiệu Quả','Xây dựng chiến lược và sản xuất nội dung thu hút, giữ chân khách hàng.',750000,4.5,'2022-12-15','https://placehold.co/600x400/indigo/white?text=Content+Marketing',7),(13,'Học Guitar Đệm Hát Cơ Bản','Tự tin đệm hát những bài hát yêu thích sau khóa học guitar này.',500000,4.7,'2023-09-03','https://placehold.co/600x400/amber/white?text=Guitar+Đệm+Hát',1),(14,'Excel Nâng Cao Cho Dân Văn Phòng','Làm chủ các hàm, công cụ phân tích dữ liệu và tự động hóa báo cáo trong Excel.',600000,4.6,'2023-10-10','https://placehold.co/600x400/deeporange/white?text=Excel+Nâng+Cao',8),(15,'Thiết Kế Web Cơ Bản với HTML & CSS','Tự tay xây dựng giao diện trang web tĩnh đầu tiên của bạn.',550000,4.8,'2023-11-01','https://placehold.co/600x400/bluegrey/white?text=HTML+CSS',4),(16,'Kỹ Năng Bán Hàng Đỉnh Cao','Nắm vững quy trình và bí quyết chốt sale hiệu quả, tăng doanh số đột phá.',850000,4.7,'2024-01-05','https://placehold.co/600x400/lightgreen/white?text=Kỹ+Năng+Sales',5),(17,'Lập Trình Android Cơ Bản','Xây dựng ứng dụng Android đầu tiên với ngôn ngữ Kotlin hoặc Java.',950000,4.6,'2024-02-14','https://placehold.co/600x400/darkred/white?text=Android+Dev',2),(18,'Nghệ Thuật Nhiếp Ảnh Cho Smartphone','Biến chiếc điện thoại thành công cụ sáng tạo ảnh chuyên nghiệp.',400000,4.5,'2023-12-20','https://placehold.co/600x400/gold/black?text=Mobile+Photography',9),(19,'Tiếng Nhật Sơ Cấp N5','Làm quen với bảng chữ cái Hiragana, Katakana và cấu trúc ngữ pháp cơ bản.',700000,4.8,'2024-03-10','https://placehold.co/600x400/darkblue/white?text=Tiếng+Nhật+N5',3),(20,'Digital Marketing Foundation','Nền tảng vững chắc về tiếp thị kỹ thuật số, bao gồm SEO, SEM, Social Media.',800000,4.7,'2024-04-15','https://placehold.co/600x400/darkcyan/white?text=Digital+Marketing',7),(21,'Quản Trị Nhân Sự Hiện Đại','Các phương pháp quản lý và phát triển nguồn nhân lực hiệu quả trong doanh nghiệp.',1100000,4.9,'2024-05-20','https://placehold.co/600x400/darkmagenta/white?text=Quản+Trị+Nhân+Sự',5);
 /*!40000 ALTER TABLE `course` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -270,7 +301,7 @@ CREATE TABLE `lecture` (
   `video_url` varchar(255) DEFAULT NULL,
   `document_url` varchar(255) DEFAULT NULL,
   `lecture_order` int NOT NULL,
-  `create_date` date NOT NULL,
+  `created_date` date NOT NULL,
   `chapter_id` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_lecture_chapter` (`chapter_id`),
@@ -329,7 +360,7 @@ CREATE TABLE `payment` (
   `id` int NOT NULL AUTO_INCREMENT,
   `amount` double NOT NULL,
   `method` varchar(50) DEFAULT NULL,
-  `create_date` date NOT NULL,
+  `created_date` date NOT NULL,
   `status` varchar(50) NOT NULL DEFAULT 'UNPAID',
   `user_id` int NOT NULL,
   PRIMARY KEY (`id`),
@@ -359,7 +390,7 @@ CREATE TABLE `question` (
   `id` int NOT NULL AUTO_INCREMENT,
   `content` text NOT NULL,
   `type` int NOT NULL,
-  `create_date` date NOT NULL,
+  `created_date` date NOT NULL,
   `test_id` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_question_test` (`test_id`),
@@ -387,7 +418,7 @@ DROP TABLE IF EXISTS `response`;
 CREATE TABLE `response` (
   `id` int NOT NULL AUTO_INCREMENT,
   `content` text NOT NULL,
-  `create_date` date NOT NULL,
+  `created_date` date NOT NULL,
   `is_teacher_response` tinyint(1) NOT NULL,
   `conversation_id` int NOT NULL,
   `parent_response_id` int DEFAULT NULL,
@@ -419,7 +450,7 @@ DROP TABLE IF EXISTS `review_comment`;
 CREATE TABLE `review_comment` (
   `id` int NOT NULL AUTO_INCREMENT,
   `comment` text NOT NULL,
-  `create_date` date NOT NULL,
+  `created_date` date NOT NULL,
   `user_id` int NOT NULL,
   `course_id` int NOT NULL,
   PRIMARY KEY (`id`),
@@ -546,7 +577,7 @@ CREATE TABLE `user` (
   `phone_number` varchar(20) NOT NULL,
   `gender` tinyint(1) NOT NULL,
   `address` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8_general_ci DEFAULT NULL,
-  `create_date` date NOT NULL,
+  `created_date` date NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -570,4 +601,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-04-28  8:54:43
+-- Dump completed on 2025-05-01 21:36:49

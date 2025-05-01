@@ -26,13 +26,13 @@
             <div class="collapse navbar-collapse" id="collapsibleNavbar">
                 <ul sec:authorize="isAuthenticated()" class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Courses</a>
+                        <a class="nav-link" th:href="@{/courses}">Courses</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Teachers</a>
+                        <a class="nav-link" th:href="@{/teachers}">Teachers</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Statistic</a>
+                        <a class="nav-link" th:href="@{/statistics}">Students</a>
                     </li>
                 </ul>
 
@@ -46,7 +46,7 @@
     </nav>
 </header>
 
-<footer id="footer" class="text-white text-center text-lg-start bg-dark">
+<footer id="footer" th:fragment="footer" class="text-white text-center text-lg-start bg-dark">
     <div class="text-center p-3 bg-dark bg-opacity-25">
         © 2025 Copyright:
         <a class="text-white text-decoration-none" href="https://github.com/apelion283/CoursesHub">CoursesHub</a>
