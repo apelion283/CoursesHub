@@ -1,0 +1,28 @@
+a{
+    text-decoration: none;
+}
+
+.custom-card {
+    color: white;
+}
+
+.student-card {
+    background-color: #04A4F4;
+}
+
+.courses-card {
+    background-color: #25C78B;
+}
+
+.teachers-card {
+    background-color: #DB5962;
+}
+
+.card-manage-btn{
+    color: white;
+    text-decoration: none;
+}
+
+.card-manage-btn:hover {
+    color: black;
+}
