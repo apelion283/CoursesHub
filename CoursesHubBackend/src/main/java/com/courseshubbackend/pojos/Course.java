@@ -4,22 +4,12 @@
  */
 package com.courseshubbackend.pojos;
 
-import jakarta.persistence.Basic;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
-import jakarta.persistence.NamedQueries;
-import jakarta.persistence.NamedQuery;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
@@ -35,8 +25,8 @@ import java.util.Set;
     @NamedQuery(name = "Course.findById", query = "SELECT c FROM Course c WHERE c.id = :id"),
     @NamedQuery(name = "Course.findByName", query = "SELECT c FROM Course c WHERE c.name = :name"),
     @NamedQuery(name = "Course.findByPrice", query = "SELECT c FROM Course c WHERE c.price = :price"),
-    @NamedQuery(name = "Course.findByAvearageStar", query = "SELECT c FROM Course c WHERE c.avearageStar = :avearageStar"),
-    @NamedQuery(name = "Course.findByCreateDate", query = "SELECT c FROM Course c WHERE c.createDate = :createDate")})
+    @NamedQuery(name = "Course.findByAvearageStar", query = "SELECT c FROM Course c WHERE c.averageStar = :avearageStar"),
+    @NamedQuery(name = "Course.findByCreateDate", query = "SELECT c FROM Course c WHERE c.createdDate = :createDate")})
 public class Course implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -60,13 +50,23 @@ public class Course implements Serializable {
     private int price;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "avearage_star")
-    private double avearageStar;
+    @Column(name = "average_star")
+    private double averageStar;
+    @Lob
+    @Size(max = 65535)
+    @Column(name = "image_url")
+    @NotNull
+    private String imageUrl;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "create_date")
+    @Column(name = "created_date")
     @Temporal(TemporalType.DATE)
-    private Date createDate;
+    private Date createdDate;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @OnDelete(action = OnDeleteAction.SET_NULL)
+    @JoinColumn(name = "category_id")
+    private Category category;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "course")
     private Set<Chapter> chapterSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "course")
@@ -87,12 +87,12 @@ public class Course implements Serializable {
         this.id = id;
     }
 
-    public Course(Integer id, String name, int price, double avearageStar, Date createDate) {
+    public Course(Integer id, String name, int price, double averageStar, Date createdDate) {
         this.id = id;
         this.name = name;
         this.price = price;
-        this.avearageStar = avearageStar;
-        this.createDate = createDate;
+        this.averageStar = averageStar;
+        this.createdDate = createdDate;
     }
 
     public Integer getId() {
@@ -127,21 +127,30 @@ public class Course implements Serializable {
         this.price = price;
     }
 
-    public double getAvearageStar() {
-        return avearageStar;
+    public double getAverageStar() {
+        return averageStar;
     }
 
-    public void setAvearageStar(double avearageStar) {
-        this.avearageStar = avearageStar;
+    public void setAverageStar(double averageStar) {
+        this.averageStar = averageStar;
     }
 
-    public Date getCreateDate() {
-        return createDate;
+    public Date getCreatedDate() {
+        return createdDate;
     }
 
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
     }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
 
     public Set<Chapter> getChapterSet() {
         return chapterSet;
@@ -215,5 +224,12 @@ public class Course implements Serializable {
     public String toString() {
         return "com.ndd.courseshubbackend.pojos.Course[ id=" + id + " ]";
     }
-    
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 }
