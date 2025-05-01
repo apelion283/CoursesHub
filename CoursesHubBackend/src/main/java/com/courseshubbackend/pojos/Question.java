@@ -36,7 +36,7 @@ import java.util.Set;
     @NamedQuery(name = "Question.findAll", query = "SELECT q FROM Question q"),
     @NamedQuery(name = "Question.findById", query = "SELECT q FROM Question q WHERE q.id = :id"),
     @NamedQuery(name = "Question.findByType", query = "SELECT q FROM Question q WHERE q.type = :type"),
-    @NamedQuery(name = "Question.findByCreateDate", query = "SELECT q FROM Question q WHERE q.createDate = :createDate")})
+    @NamedQuery(name = "Question.findByCreateDate", query = "SELECT q FROM Question q WHERE q.createdDate = :createDate")})
 public class Question implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -57,9 +57,9 @@ public class Question implements Serializable {
     private int type;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "create_date")
+    @Column(name = "created_date")
     @Temporal(TemporalType.DATE)
-    private Date createDate;
+    private Date createdDate;
     @JoinColumn(name = "test_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Test test;
@@ -73,11 +73,11 @@ public class Question implements Serializable {
         this.id = id;
     }
 
-    public Question(Integer id, String content, int type, Date createDate) {
+    public Question(Integer id, String content, int type, Date createdDate) {
         this.id = id;
         this.content = content;
         this.type = type;
-        this.createDate = createDate;
+        this.createdDate = createdDate;
     }
 
     public Integer getId() {
@@ -104,12 +104,12 @@ public class Question implements Serializable {
         this.type = type;
     }
 
-    public Date getCreateDate() {
-        return createDate;
+    public Date getCreatedDate() {
+        return createdDate;
     }
 
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
     }
 
     public Test getTestId() {

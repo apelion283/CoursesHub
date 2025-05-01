@@ -37,7 +37,7 @@ import java.util.Set;
     @NamedQuery(name = "Chapter.findById", query = "SELECT c FROM Chapter c WHERE c.id = :id"),
     @NamedQuery(name = "Chapter.findByName", query = "SELECT c FROM Chapter c WHERE c.name = :name"),
     @NamedQuery(name = "Chapter.findByChapterOrder", query = "SELECT c FROM Chapter c WHERE c.chapterOrder = :chapterOrder"),
-    @NamedQuery(name = "Chapter.findByCreateDate", query = "SELECT c FROM Chapter c WHERE c.createDate = :createDate")})
+    @NamedQuery(name = "Chapter.findByCreateDate", query = "SELECT c FROM Chapter c WHERE c.createdDate = :createDate")})
 public class Chapter implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -61,9 +61,9 @@ public class Chapter implements Serializable {
     private int chapterOrder;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "create_date")
+    @Column(name = "created_date")
     @Temporal(TemporalType.DATE)
-    private Date createDate;
+    private Date createdDate;
     @JoinColumn(name = "course_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Course course;
@@ -81,11 +81,11 @@ public class Chapter implements Serializable {
         this.id = id;
     }
 
-    public Chapter(Integer id, String name, int chapterOrder, Date createDate) {
+    public Chapter(Integer id, String name, int chapterOrder, Date createdDate) {
         this.id = id;
         this.name = name;
         this.chapterOrder = chapterOrder;
-        this.createDate = createDate;
+        this.createdDate = createdDate;
     }
 
     public Integer getId() {
@@ -120,12 +120,12 @@ public class Chapter implements Serializable {
         this.chapterOrder = chapterOrder;
     }
 
-    public Date getCreateDate() {
-        return createDate;
+    public Date getCreatedDate() {
+        return createdDate;
     }
 
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
     }
 
     public Course getCourse() {

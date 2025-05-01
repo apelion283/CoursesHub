@@ -16,6 +16,16 @@ public class UserController {
                 && !(authentication.getPrincipal() instanceof String && authentication.getPrincipal().equals("anonymousUser"))){
             return "redirect:/";
         }
-        return "login";
+        return "auth/login";
+    }
+
+    @GetMapping("/teachers")
+    public String teachersView() {
+        return "teachers/teachers";
+    }
+
+    @GetMapping("/students")
+    public String studentsView(){
+        return "students/students";
     }
 }

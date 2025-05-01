@@ -32,7 +32,7 @@ import java.util.Date;
 @NamedQueries({
     @NamedQuery(name = "ReviewComment.findAll", query = "SELECT r FROM ReviewComment r"),
     @NamedQuery(name = "ReviewComment.findById", query = "SELECT r FROM ReviewComment r WHERE r.id = :id"),
-    @NamedQuery(name = "ReviewComment.findByCreateDate", query = "SELECT r FROM ReviewComment r WHERE r.createDate = :createDate")})
+    @NamedQuery(name = "ReviewComment.findByCreateDate", query = "SELECT r FROM ReviewComment r WHERE r.createdDate = :createDate")})
 public class ReviewComment implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -49,9 +49,9 @@ public class ReviewComment implements Serializable {
     private String comment;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "create_date")
+    @Column(name = "created_date")
     @Temporal(TemporalType.DATE)
-    private Date createDate;
+    private Date createdDate;
     @JoinColumn(name = "course_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Course course;
@@ -66,10 +66,10 @@ public class ReviewComment implements Serializable {
         this.id = id;
     }
 
-    public ReviewComment(Integer id, String comment, Date createDate) {
+    public ReviewComment(Integer id, String comment, Date createdDate) {
         this.id = id;
         this.comment = comment;
-        this.createDate = createDate;
+        this.createdDate = createdDate;
     }
 
     public Integer getId() {
@@ -88,12 +88,12 @@ public class ReviewComment implements Serializable {
         this.comment = comment;
     }
 
-    public Date getCreateDate() {
-        return createDate;
+    public Date getCreatedDate() {
+        return createdDate;
     }
 
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
     }
 
     public Course getCourseId() {

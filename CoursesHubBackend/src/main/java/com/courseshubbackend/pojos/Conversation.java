@@ -35,7 +35,7 @@ import java.util.Set;
     @NamedQuery(name = "Conversation.findAll", query = "SELECT c FROM Conversation c"),
     @NamedQuery(name = "Conversation.findById", query = "SELECT c FROM Conversation c WHERE c.id = :id"),
     @NamedQuery(name = "Conversation.findByTopic", query = "SELECT c FROM Conversation c WHERE c.topic = :topic"),
-    @NamedQuery(name = "Conversation.findByCreateDate", query = "SELECT c FROM Conversation c WHERE c.createDate = :createDate")})
+    @NamedQuery(name = "Conversation.findByCreateDate", query = "SELECT c FROM Conversation c WHERE c.createdDate = :createDate")})
 public class Conversation implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -51,9 +51,9 @@ public class Conversation implements Serializable {
     private String topic;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "create_date")
+    @Column(name = "created_date")
     @Temporal(TemporalType.DATE)
-    private Date createDate;
+    private Date createdDate;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "conversation")
     private Set<Response> responseSet;
     @JoinColumn(name = "lecture_id", referencedColumnName = "id")
@@ -70,10 +70,10 @@ public class Conversation implements Serializable {
         this.id = id;
     }
 
-    public Conversation(Integer id, String topic, Date createDate) {
+    public Conversation(Integer id, String topic, Date createdDate) {
         this.id = id;
         this.topic = topic;
-        this.createDate = createDate;
+        this.createdDate = createdDate;
     }
 
     public Integer getId() {
@@ -92,12 +92,12 @@ public class Conversation implements Serializable {
         this.topic = topic;
     }
 
-    public Date getCreateDate() {
-        return createDate;
+    public Date getCreatedDate() {
+        return createdDate;
     }
 
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
     }
 
     public Set<Response> getResponseSet() {

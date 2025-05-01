@@ -4,7 +4,6 @@ import com.courseshubbackend.pojos.User;
 import com.courseshubbackend.repositories.UserRepository;
 import com.courseshubbackend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.config.core.GrantedAuthorityDefaults;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,7 +11,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Calendar;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 @Service("userDetailsService")
@@ -26,6 +27,12 @@ public class UserServiceImpl implements UserService {
     public User getUserByUsername(String username) {
         return this.userRepository.getUserByUsername(username);
     }
+
+    @Override
+    public int countUsers(Map<String, String> params) {
+        return this.userRepository.countUsers(params);
+    }
+
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

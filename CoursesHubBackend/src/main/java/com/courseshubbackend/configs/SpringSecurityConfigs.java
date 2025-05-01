@@ -41,6 +41,10 @@ public class SpringSecurityConfigs {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable).authorizeHttpRequests(requests -> requests
                         .requestMatchers("/").authenticated()
+                        .requestMatchers("/courses").authenticated()
+                        .requestMatchers("/teachers").authenticated()
+                        .requestMatchers("/students").authenticated()
+                        .requestMatchers("/categories").authenticated()
                         .requestMatchers("/css/**", "/js/**", "/images/**",  "/configs/**").permitAll()
                         .requestMatchers("/api/**").permitAll())
                 .formLogin(form -> form.loginPage("/login")
