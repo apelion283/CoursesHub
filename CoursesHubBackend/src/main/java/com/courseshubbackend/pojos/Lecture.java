@@ -4,26 +4,14 @@
  */
 package com.courseshubbackend.pojos;
 
-import jakarta.persistence.Basic;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.NamedQueries;
-import jakarta.persistence.NamedQuery;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
@@ -66,6 +54,7 @@ public class Lecture implements Serializable {
     @NotNull
     @Column(name = "created_date")
     @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date createdDate;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "lecture")
     private Set<CourseProgress> courseProgressSet;
@@ -74,6 +63,18 @@ public class Lecture implements Serializable {
     private Chapter chapter;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "lecture")
     private Set<Conversation> conversationSet;
+
+    @Transient
+    private MultipartFile videoFile;
+    @Transient
+    private MultipartFile documentFile;
+
+    @PrePersist
+    protected void onCreate() {
+        if (this.createdDate == null) {
+            this.createdDate = new Date();
+        }
+    }
 
     public Lecture() {
     }
@@ -145,13 +146,14 @@ public class Lecture implements Serializable {
         this.courseProgressSet = courseProgressSet;
     }
 
-    public Chapter getChapterId() {
+    public Chapter getChapter() {
         return chapter;
     }
 
-    public void setChapterId(Chapter chapterId) {
-        this.chapter = chapterId;
+    public void setChapter(Chapter chapter) {
+        this.chapter = chapter;
     }
+
 
     public Set<Conversation> getConversationSet() {
         return conversationSet;
@@ -185,5 +187,20 @@ public class Lecture implements Serializable {
     public String toString() {
         return "com.ndd.courseshubbackend.pojos.Lecture[ id=" + id + " ]";
     }
-    
+
+    public MultipartFile getVideoFile() {
+        return videoFile;
+    }
+
+    public void setVideoFile(MultipartFile videoFile) {
+        this.videoFile = videoFile;
+    }
+
+    public MultipartFile getDocumentFile() {
+        return documentFile;
+    }
+
+    public void setDocumentFile(MultipartFile documentFile) {
+        this.documentFile = documentFile;
+    }
 }
