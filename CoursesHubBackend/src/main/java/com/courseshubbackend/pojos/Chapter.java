@@ -4,27 +4,13 @@
  */
 package com.courseshubbackend.pojos;
 
-import jakarta.persistence.Basic;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Lob;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.NamedQueries;
-import jakarta.persistence.NamedQuery;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
+import com.courseshubbackend.pojos.course.Course;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.io.Serializable;
-import java.util.Date;
-import java.util.Set;
+import java.util.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  *
@@ -63,16 +49,28 @@ public class Chapter implements Serializable {
     @NotNull
     @Column(name = "created_date")
     @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date createdDate;
     @JoinColumn(name = "course_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Course course;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "chapter")
-    private Set<CourseProgress> courseProgressSet;
+    private List<CourseProgress> courseProgressList = new ArrayList<>();
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "chapter")
-    private Set<Test> testSet;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "chapter")
-    private Set<Lecture> lectureSet;
+    private List<Test> testList = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "chapter", orphanRemoval = true)
+    private List<Lecture> lectureList = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "chapter", orphanRemoval = true)
+    private List<Resource> resourceList = new ArrayList<>();
+
+    public List<Resource> getResourceList() {
+        return resourceList;
+    }
+
+    public void setResourceList(List<Resource> resourceList) {
+        this.resourceList = resourceList;
+    }
 
     public Chapter() {
     }
@@ -86,6 +84,13 @@ public class Chapter implements Serializable {
         this.name = name;
         this.chapterOrder = chapterOrder;
         this.createdDate = createdDate;
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        if (this.createdDate == null) {
+            this.createdDate = new Date();
+        }
     }
 
     public Integer getId() {
@@ -136,28 +141,28 @@ public class Chapter implements Serializable {
         this.course = course;
     }
 
-    public Set<CourseProgress> getCourseProgressSet() {
-        return courseProgressSet;
+    public List<CourseProgress> getCourseProgressList() {
+        return courseProgressList;
     }
 
-    public void setCourseProgressSet(Set<CourseProgress> courseProgressSet) {
-        this.courseProgressSet = courseProgressSet;
+    public void setCourseProgressList(List<CourseProgress> courseProgressList) {
+        this.courseProgressList = courseProgressList;
     }
 
-    public Set<Test> getTestSet() {
-        return testSet;
+    public List<Test> getTestList() {
+        return testList;
     }
 
-    public void setTestSet(Set<Test> testSet) {
-        this.testSet = testSet;
+    public void setTestList(List<Test> testList) {
+        this.testList = testList;
     }
 
-    public Set<Lecture> getLectureSet() {
-        return lectureSet;
+    public List<Lecture> getLectureList() {
+        return lectureList;
     }
 
-    public void setLectureSet(Set<Lecture> lectureSet) {
-        this.lectureSet = lectureSet;
+    public void setLectureList(List<Lecture> lectureList) {
+        this.lectureList = lectureList;
     }
 
     @Override
