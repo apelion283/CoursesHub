@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${teacher.id != null} ? 'Edit ' + ${teacher.user.fullName} : 'Add new Teacher'"></title>
+    <th:block th:replace="~{/layout/base :: styles}"></th:block>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script th:src="@{/js/teachers/delete-teacher-dialog.js}"></script>
+    <script th:src="@{/js/teachers/preview-teacher-avatar.js}"></script>
+    <script th:src="@{/js/utils/prevent-interact-to-uploading.js}"></script>
+    <link rel="stylesheet" th:href="@{/css/teachers/teacher-detail.css}"/>
+</head>
+<body>
+<div th:replace="~{/layout/base :: header}"></div>
+<main class="container">
+    <h1 class="text-center text-info mt-1">
+        <span th:if="${teacher.id != null}" th:text="'Edit ' + ${teacher.user.fullName}"></span>
+        <span th:unless="${teacher.id != null}">Add a new Teacher</span>
+    </h1>
+    <form enctype="multipart/form-data" id="teacherForm"
+          method="post" th:action="${teacher.id != null} ? @{/teachers/update} : @{/teachers/add}" th:object="${teacher}">
+        <div class="mb-3 mt-3 teacher-image-container">
+            <label class="form-label" for="file">Teacher Avatar: </label>
+            <input accept="image/*" class="form-control" id="file" th:field="*{avatarFile}" th:required="${teacher.avatarUrl == null}"
+                   type="file"/>
+            <input class="form-control hidden-url" th:field="*{avatarUrl}" type="hidden"/>
+            <div id="avatar-preview" class="mt-2"></div>
+        </div>
+        <div class="mb-3 mt-3">
+            <label class="form-label" for="name">Teacher FullName: </label>
+            <input class="form-control" id="name" placeholder="Teacher FullName" required th:field="*{user.fullName}" type="text"/>
+        </div>
+        <div class="mb-3 mt-3">
+            <label class="form-label" for="email">Teacher Email: </label>
+            <input class="form-control" id="email" placeholder="Teacher Email" required th:field="*{user.email}" type="text"/>
+        </div>
+        <div class="mb-3 mt-3">
+            <label class="form-label" for="phone-number">Phone Number: </label>
+            <input class="form-control" id="phone-number" placeholder="Phone Number" required th:field="*{user.phoneNumber}" type="text" maxlength="20" minlength="10"/>
+        </div>
+        <div class="mb-3 mt-3">
+            <label class="form-label" for="username">Teacher Username: </label>
+            <input class="form-control" id="username" placeholder="Teacher Username" required th:field="*{user.username}"
+                   type="text"/>
+        </div>
+        <div class="mb-3 mt-3">
+            <label class="form-label" for="new-password">Teacher New Password: </label>
+            <input class="form-control" id="new-password" placeholder="Teacher New Password" th:field="*{user.password}" th:required="${teacher.id == null}"
+                   type="password"/>
+        </div>
+        <div class="mb-3 mt-3">
+            <label class="form-label" for="gender">Teacher Gender: </label>
+            <select class="form-select" id="gender" th:field="*{user.gender}" th:required="${teacher.user.gender == null}">
+                <option value="true" th:text="Male"></option>
+                <option value="false" th:text="Female"></option>
+            </select>
+        </div>
+        <div class="mb-3 mt-3">
+            <label class="form-label" for="address">Teacher Address: </label>
+            <input class="form-control" id="address" placeholder="Teacher Address" required th:field="*{user.address}"
+                   type="text"/>
+        </div>
+        <div class="mb-3 mt-3">
+            <label class="form-label">Courses Teaching:</label>
+            <ul class="list-group">
+                <li th:each="course : ${teacher.courseSet}" class="list-group-item d-flex justify-content-between align-items-center">
+                    <span th:text="${course.name}">Course Name</span>
+                    <a th:href="@{'/courses/' + ${course.id}}" class="btn btn-outline-primary btn-sm"><i class="fa-solid fa-eye"></i> View</a>
+                </li>
+                <li th:if="${#lists.isEmpty(teacher.courseSet)}" class="list-group-item text-muted">No courses assigned.</li>
+            </ul>
+        </div>
+
+        <div class="mb-3 mt-3">
+            <input class="form-control" th:field="*{id}" type="hidden"/>
+            <input class="form-control" th:field="*{user.id}" type="hidden"/>
+            <input class="form-control" th:field="*{user.createdDate}" type="hidden"/>
+            <input class="form-control" th:field="*{user.userRole}" type="hidden"/>
+            <input class="form-control" th:field="*{averageRating}" type="hidden"/>
+        </div>
+
+        <div class="mb-3 mt-3">
+            <button class="btn btn-success mt-1 submit-button" type="submit">
+                <span th:if="${teacher.id == null}">Add new Teacher</span>
+                <span th:unless="${teacher.id == null}">Save changes</span>
+            </button>
+            <button class="btn btn-danger mt-1" th:if="${teacher.id != null}" th:onclick="'deleteTeacher(\'' + @{/api/teachers} + '\', ' + ${teacher.id} + ', \'' + @{/teachers} + '\')'"
+                    type="button">
+                Delete Teacher
+            </button>
+        </div>
+    </form>
+</main>
+<div th:replace="~{/layout/base :: footer}"></div>
+</body>
+</html>
