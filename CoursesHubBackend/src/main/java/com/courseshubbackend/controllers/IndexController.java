@@ -83,7 +83,6 @@ public class IndexController {
         courseLastMonthParams.put("createdYear", String.valueOf(lastYear));
         int numberOfNewCoursesLastMonth = this.courseService.countCourses(courseLastMonthParams);
 
-        // Thêm vào model nếu cần
         model.addAttribute("numberOfStudents", numberOfStudents);
         model.addAttribute("numberOfNewStudentsThisMonth", numberOfNewStudentsThisMonth);
         model.addAttribute("numberOfNewStudentsLastMonth", numberOfNewStudentsLastMonth);
