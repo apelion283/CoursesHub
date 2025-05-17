@@ -22,7 +22,6 @@ public class FileUtils {
                 "mp4", "avi", "mov", "wmv", "flv", "mkv", "webm", "mpeg", "mpg"
         );
 
-        // Trả về "video" nếu MIME type hoặc đuôi file là video
         if (isVideoMime || videoExtensions.contains(extension)) {
             return "video";
         }
