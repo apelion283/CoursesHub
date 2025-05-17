@@ -2,11 +2,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.courseshubbackend.pojos;
+package com.courseshubbackend.pojos.course;
 
+import com.courseshubbackend.pojos.*;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -84,10 +86,24 @@ public class Course implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "course")
     private Set<ReviewComment> reviewCommentSet = new HashSet<>();
 
-    @NotNull
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "teacher_id", nullable = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = true)
+    @JoinColumn(name = "teacher_id", nullable = true)
+    @OnDelete(action = OnDeleteAction.SET_NULL)
     private Teacher teacher;
+
+    @NotNull
+    @ColumnDefault("0")
+    @Enumerated(EnumType.ORDINAL)
+    @Column(name = "course_status", nullable = false)
+    private CourseStatusEnum courseStatus = CourseStatusEnum.ACTIVE;
+
+    public CourseStatusEnum getCourseStatus() {
+        return courseStatus;
+    }
+
+    public void setCourseStatus(CourseStatusEnum courseStatus) {
+        this.courseStatus = courseStatus;
+    }
 
     public Teacher getTeacher() {
         return teacher;
