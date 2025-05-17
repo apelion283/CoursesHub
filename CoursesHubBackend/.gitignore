@@ -57,3 +57,7 @@ cached-antora-playbook.yml
 
 node_modules
 /.kotlin/
+
+#Environment
+application.properties
+database.properties
