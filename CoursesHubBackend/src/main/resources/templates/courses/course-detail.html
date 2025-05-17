@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${course.id != null} ? 'Edit ' + ${course.name} : 'Add new Course'"></title>
+    <th:block th:replace="~{/layout/base :: styles}"></th:block>
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script th:src="@{/js/courses/quill-init.js}"></script>
+    <script th:src="@{/js/courses/delete-course-dialog.js}"></script>
+    <script th:src="@{/js/courses/course-detail.js}"></script>
+    <script th:src="@{/js/courses/template-loader.js}"></script>
+    <script th:src="@{/js/courses/preview-file.js}"></script>
+    <script th:src="@{/js/utils/prevent-interact-to-uploading.js}"></script>
+    <link rel="stylesheet" th:href="@{/css/courses/course-detail.css}"/>
+    <meta name="context-path" content="${#ServletContext.getContextPath()}">
+</head>
+<body>
+<div th:replace="~{/layout/base :: header}"></div>
+<main class="container">
+    <h1 class="text-center text-info mt-1">
+        <span th:if="${course.id != null}" th:text="'Edit ' + ${course.name}"></span>
+        <span th:unless="${course.id != null}">Add a new Course</span>
+    </h1>
+    <form enctype="multipart/form-data" id="courseForm"
+          method="post" th:action="${course.id != null} ? @{/courses/update} : @{/courses/add}" th:object="${course}">
+        <div class="mb-3 mt-3">
+            <label class="form-label" for="name">Course Name: </label>
+            <input class="form-control" id="name" placeholder="Course name" required th:field="*{name}" type="text"/>
+        </div>
+        <div class="mb-3 mt-3">
+            <label class="form-label" for="course-description">Course's Description: </label>
+            <div class="form-control editor" id="editor"></div>
+            <textarea id="course-description" style="display:none;" th:field="*{description}"></textarea>
+        </div>
+        <div class="mb-3 mt-3">
+            <label class="form-label" for="price">Course's Price: </label>
+            <input class="form-control" id="price" placeholder="Course Price" required th:field="*{price}"
+                   type="number"/>
+        </div>
+        <div class="mb-3 mt-3">
+            <label class="form-label" for="cate">Course's Category: </label>
+            <select class="form-select" id="cate" th:field="*{category}">
+                <option th:each="c: ${categories}" th:text="${c.name}" th:value="${c.id}">1</option>
+            </select>
+        </div>
+        <div class="mb-3 mt-3">
+            <label class="form-label" >Assigned Teacher: </label>
+            <select class="form-select" id="teacher" th:field="*{teacher}">
+                <option th:each="t: ${teachers}" th:text="${t.user.fullName}" th:value="${t.id}">1</option>
+            </select>
+        </div>
+        <div class="mb-3 mt-3 course-image-container">
+            <label class="form-label" for="file">Course Image: </label>
+            <input accept="image/*" class="form-control" id="file" th:field="*{file}" th:required="${course.imageUrl == null}"
+                   type="file"/>
+            <input class="form-control hidden-url" th:field="*{imageUrl}" type="hidden"/>
+        </div>
+        <div class="mb-3 mt-3">
+            <input class="form-control" th:field="*{id}" type="hidden"/>
+            <input class="form-control" th:field="*{courseStatus}" type="hidden"/>
+            <input class="form-control" th:field="*{createdDate}" type="hidden"/>
+            <input class="form-control" th:field="*{averageStar}" type="hidden"/>
+        </div>
+
+        <div class="card mt-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">Course Resource Management</h4>
+                <button class="btn btn-primary btn-sm" id="addChapterBtn" type="button">
+                    <i class="fas fa-plus"></i> Add Chapter
+                </button>
+            </div>
+            <div class="card-body" th:data-template-url="@{/templates/courses/course-detail-resource-management-template.html}" id="chaptersContainer">
+                <div th:if="*{chapterList.empty}" style="display: none;" ></div>
+                <div th:attr="data-index=${chapterStat.index}" class="chapter-block" th:each="chapter, chapterStat : *{chapterList}">
+                    <input th:field="*{chapterList[__${chapterStat.index}__].id}" type="hidden"/>
+                    <input th:field="*{chapterList[__${chapterStat.index}__].createdDate}" type="hidden"/>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5>Chapter <span th:text="${chapterStat.index + 1}"></span></h5>
+                        <button class="btn btn-danger btn-sm" onclick="removeChapter(this)" type="button"><i
+                                class="fas fa-trash"></i></button>
+                    </div>
+                    <div class="mb-2">
+                        <label>Chapter name:</label>
+                        <input class="form-control" required
+                               th:field="*{chapterList[__${chapterStat.index}__].name}"
+                               type="text"/>
+                    </div>
+                    <div class="mb-2">
+                        <label>Chapter decription:</label>
+                        <div class="form-control editor" th:id="'chapter-' + ${chapterStat.index} + '-description-editor'"></div>
+                        <textarea th:id="'chapter-' + ${chapterStat.index} + '-description'" style="display:none;" th:field="*{chapterList[__${chapterStat.index}__].description}"></textarea>
+                    </div>
+                    <div class="mb-2">
+                        <label>Chapter order:</label>
+                        <input class="form-control" required min="1" readonly
+                               th:field="*{chapterList[__${chapterStat.index}__].chapterOrder}"
+                               type="number"/>
+
+                    </div>
+                    <!-- Lecture Block -->
+                    <div class="border rounded p-2 mb-2 bg-light">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5>Lecture management</h5>
+                            <button class="btn btn-success btn-sm" onclick="addLecture(this)" type="button"><i
+                                    class="fas fa-plus"></i> Add Lecture
+                            </button>
+                        </div>
+                        <div class="lecturesContainer">
+                            <div th:if="*{chapterList[__${chapterStat.index}__].lectureList.empty}" style="display: none;"></div>
+                            <div class="lecture-block border rounded p-2 mt-2"
+                                 th:each="lecture, lectureStat : *{chapterList[__${chapterStat.index}__].lectureList}">
+                                <input th:field="*{chapterList[__${chapterStat.index}__].lectureList[__${lectureStat.index}__].id}"
+                                       type="hidden"/>
+                                <input th:field="*{chapterList[__${chapterStat.index}__].lectureList[__${lectureStat.index}__].createdDate}"
+                                       type="hidden"/>
+                                <input th:field="*{chapterList[__${chapterStat.index}__].lectureList[__${lectureStat.index}__].videoUrl}"
+                                       type="hidden" class="hidden-url"/>
+                                <input th:field="*{chapterList[__${chapterStat.index}__].lectureList[__${lectureStat.index}__].documentUrl}"
+                                       type="hidden" class="hidden-url"/>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h6>Lecture <span th:text="${lectureStat.index + 1}"></span></h6>
+                                    <button class="btn btn-danger btn-sm" onclick="removeLecture(this)" type="button"><i
+                                            class="fas fa-trash"></i></button>
+                                </div>
+                                <div class="mb-2">
+                                    <label> Lecture name:</label>
+                                    <input class="form-control" required
+                                           th:field="*{chapterList[__${chapterStat.index}__].lectureList[__${lectureStat.index}__].name}"
+                                           type="text"/>
+                                </div>
+                                <div class="mb-2">
+                                    <label>Video:</label>
+                                    <input accept="video/*" class="form-control"
+                                           th:field="*{chapterList[__${chapterStat.index}__].lectureList[__${lectureStat.index}__].videoFile}"
+                                           th:required="${lecture.videoUrl == null}"
+                                           type="file"/>
+
+                                </div>
+                                <div class="mb-2">
+                                    <label>Document:</label>
+                                    <input accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlxs" class="form-control"
+                                           th:field="*{chapterList[__${chapterStat.index}__].lectureList[__${lectureStat.index}__].documentFile}"
+                                           th:required="${lecture.documentUrl == null}"
+                                           type="file"/>
+                                </div>
+                                <div class="mb-2">
+                                    <label>Lecture order:</label>
+                                    <input class="form-control" required
+                                           th:field="*{chapterList[__${chapterStat.index}__].lectureList[__${lectureStat.index}__].lectureOrder}"
+                                           type="number" readonly/>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--Resource Block -->
+                    <div class="border rounded p-2 mb-2 bg-light">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5>Resource Management</h5>
+                            <button class="btn btn-success btn-sm" onclick="addResource(this)" type="button"><i
+                                    class="fas fa-plus"></i> Add Resource
+                            </button>
+                        </div>
+                        <div class="resourcesContainer">
+                            <div th:if="*{chapterList[__${chapterStat.index}__].resourceList.empty}" style="display: none;"></div>
+                            <div class="resource-block border rounded p-2 mt-2"
+                                 th:each="resource, resourceStat : *{chapterList[__${chapterStat.index}__].resourceList}">
+                                <input th:field="*{chapterList[__${chapterStat.index}__].resourceList[__${resourceStat.index}__].id}"
+                                       type="hidden"/>
+                                <input th:field="*{chapterList[__${chapterStat.index}__].resourceList[__${resourceStat.index}__].url}"
+                                       type="hidden" class="hidden-url"/>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h6>Resource <span th:text="${resourceStat.index + 1}"></span></h6>
+                                    <button class="btn btn-danger btn-sm" onclick="removeResource(this)" type="button">
+                                        <i class="fas fa-trash"></i></button>
+                                </div>
+                                <div class="mb-2">
+                                    <label th:for="'chapter-' + ${chapterStat.index} + '-resource-' + ${resourceStat.index} + '-name'">Resource name:</label>
+                                    <input class="form-control" required
+                                           th:field="*{chapterList[__${chapterStat.index}__].resourceList[__${resourceStat.index}__].name}"
+                                           type="text"/>
+                                </div>
+                                <div class="mb-2">
+                                    <label th:for="'chapter-' + ${chapterStat.index} + '-resource-' + ${resourceStat.index} + '-file'">URL/File:</label>
+                                    <input class="form-control"
+                                           th:field="*{chapterList[__${chapterStat.index}__].resourceList[__${resourceStat.index}__].resourceFile}"
+                                           th:required="${resource.url == null}"
+                                           type="file"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-3 mt-3">
+            <button class="btn btn-success mt-1 submit-button" type="submit">
+                <span th:if="${course.id == null}">Add new Course</span>
+                <span th:unless="${course.id == null}">Save changes</span>
+            </button>
+            <button class="btn btn-danger mt-1" th:if="${course.id != null}" th:onclick="'deleteCourse(\'' + @{/api/courses} + '\', ' + ${course.id} + ', \'' + @{/courses} + '\')'"
+                    type="button">
+                Delete Course
+            </button>
+        </div>
+    </form>
+
+</main>
+<div id="templateHolder" style="display: none;"></div>
+<div th:replace="~{/layout/base :: footer}"></div>
+</body>
+</html>
+
