@@ -28,7 +28,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
     "com.courseshubbackend.repositories",
     "com.courseshubbackend.services"
 })
-public class    WebAppContextConfig implements WebMvcConfigurer{
+public class WebAppContextConfig implements WebMvcConfigurer{
 
     @Override
     public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
