@@ -53,6 +53,9 @@ atlassian-ide-plugin.xml
 # VS Code
 .vscode/
 
+#Cursor
+.cursor/
+
 cached-antora-playbook.yml
 
 node_modules
@@ -60,4 +63,5 @@ node_modules
 
 #Environment
 application.properties
-database.properties
+src/main/resources/database.properties
+src/main/webapp/META-INF/database.properties
