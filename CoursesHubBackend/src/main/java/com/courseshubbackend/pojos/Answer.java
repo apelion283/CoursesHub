@@ -33,7 +33,7 @@ import java.util.Date;
     @NamedQuery(name = "Answer.findAll", query = "SELECT a FROM Answer a"),
     @NamedQuery(name = "Answer.findById", query = "SELECT a FROM Answer a WHERE a.id = :id"),
     @NamedQuery(name = "Answer.findByIsCorrect", query = "SELECT a FROM Answer a WHERE a.isCorrect = :isCorrect"),
-    @NamedQuery(name = "Answer.findByCreateDate", query = "SELECT a FROM Answer a WHERE a.createDate = :createDate")})
+    @NamedQuery(name = "Answer.findByCreateDate", query = "SELECT a FROM Answer a WHERE a.createdDate = :createDate")})
 public class Answer implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -54,9 +54,9 @@ public class Answer implements Serializable {
     private boolean isCorrect;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "create_date")
+    @Column(name = "created_date")
     @Temporal(TemporalType.DATE)
-    private Date createDate;
+    private Date createdDate;
     @JoinColumn(name = "question_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Question question;
@@ -68,11 +68,11 @@ public class Answer implements Serializable {
         this.id = id;
     }
 
-    public Answer(Integer id, String content, boolean isCorrect, Date createDate) {
+    public Answer(Integer id, String content, boolean isCorrect, Date createdDate) {
         this.id = id;
         this.content = content;
         this.isCorrect = isCorrect;
-        this.createDate = createDate;
+        this.createdDate = createdDate;
     }
 
     public Integer getId() {
@@ -99,12 +99,12 @@ public class Answer implements Serializable {
         this.isCorrect = isCorrect;
     }
 
-    public Date getCreateDate() {
-        return createDate;
+    public Date getCreatedDate() {
+        return createdDate;
     }
 
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
     }
 
     public Question getQuestionId() {
