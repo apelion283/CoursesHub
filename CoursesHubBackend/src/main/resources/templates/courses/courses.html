@@ -4,12 +4,15 @@
     <meta charset="UTF-8">
     <title>Courses</title>
     <th:block th:replace="~{/layout/base :: styles}"></th:block>
+    <script th:src="@{/js/courses/delete-course-dialog.js}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
 <div th:replace="~{/layout/base :: header}"></div>
 <h1 class="text-info text-center">Courses Management</h1>
 <main class="container">
-    <div class="btn btn-outline-success">Add a new Course</div>
+    <a th:href="@{/courses/add}" class="btn btn-success mt-2">Add a new course</a>
+    <h2 class="text-center text-success mt-4">Courses that are activating</h2>
     <table class="table table-striped">
         <thead>
         <tr>
@@ -21,7 +24,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr class="mt-4" th:each="c : ${courses}" th:if="${courses != null and !courses.isEmpty()}">
+        <tr class="mt-4" th:each="c : ${activatingCourses}" th:if="${activatingCourses != null and !activatingCourses.isEmpty()}">
             <td><img class="img" th:src="${c.imageUrl}" alt="Course Image"/></td>
             <td>
                 <a class="text-success text-decoration-none"
@@ -32,47 +35,59 @@
             <td th:text="${c.price + ' VNĐ'}"></td>
             <td th:text="${c.category.name}"></td>
             <td>
-                <button class="btn btn-danger">
+                <button class="btn btn-danger" th:onclick="'deleteCourse(\'' + @{/api/courses} + '\', ' + ${c.id} + ', \'' + @{/courses} + '\')'">
                     <i class="fa-solid fa-trash"></i><strong> Delete</strong>
                 </button>
-                <a th:href="@{'/courses/edit/' + ${c.id}}" class="btn btn-success">
+                <a th:href="@{'/courses/' + ${c.id}}" class="btn btn-success">
                     <i class="fa-solid fa-pencil"></i><strong> Edit</strong>
                 </a>
             </td>
         </tr>
 
-        <tr th:if="${courses == null or courses.isEmpty()}">
+        <tr th:if="${activatingCourses == null or activatingCourses.isEmpty()}">
             <td colspan="4" class="text-center text-muted">There is no courses here. Let's add a new course!</td>
         </tr>
         </tbody>
     </table>
 
-<!--    <div class="modal fade" id="addCourseModal" tabindex="-1" aria-labelledby="addCourseModalLabel" aria-hidden="true">-->
-<!--        <div class="modal-dialog">-->
-<!--            <div class="modal-content">-->
-<!--                <form th:action="@{/courses}" th:object="${newCourse}" method="post">-->
-<!--                    <div class="modal-header">-->
-<!--                        <h5 class="modal-title" id="addCourseModalLabel">Add New Course</h5>-->
-<!--                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
-<!--                    </div>-->
-<!--                    <div class="modal-body">-->
-<!--                        <div class="mb-3">-->
-<!--                            <label for="name" class="form-label">Course Name</label>-->
-<!--                            <input type="text" id="name" th:field="*{name}" class="form-control"/>-->
-<!--                        </div>-->
-<!--                        <div class="mb-3">-->
-<!--                            <label for="description" class="form-label">Description</label>-->
-<!--                            <input type="text" id="description" th:field="*{description}" class="form-control"/>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    <div class="modal-footer">-->
-<!--                        <button type="submit" class="btn btn-success">Save</button>-->
-<!--                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>-->
-<!--                    </div>-->
-<!--                </form>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
+    <h2 class="text-center text-danger mt-4">Courses that are not activating</h2>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th></th>
+            <th>Course Name</th>
+            <th>Course Price</th>
+            <th>Category</th>
+            <th>Manage Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="mt-4" th:each="c : ${inActivatingCourses}" th:if="${inActivatingCourses != null and !inActivatingCourses.isEmpty()}">
+            <td><img class="img" th:src="${c.imageUrl}" alt="Course Image"/></td>
+            <td>
+                <a class="text-success text-decoration-none"
+                   th:text="${c.name}"
+                   th:href="@{'/courses/' + ${c.id}}">
+                </a>
+            </td>
+            <td th:text="${c.price + ' VNĐ'}"></td>
+            <td th:text="${c.category.name}"></td>
+            <td>
+                <button class="btn btn-danger" th:onclick="'deleteCourse(\'' + @{/api/courses} + '\', ' + ${c.id} + ', \'' + @{/courses} + '\')'">
+                    <i class="fa-solid fa-trash"></i><strong> Delete</strong>
+                </button>
+                <a th:href="@{'/courses/' + ${c.id}}" class="btn btn-success">
+                    <i class="fa-solid fa-pencil"></i><strong> Edit</strong>
+                </a>
+            </td>
+        </tr>
+
+        <tr th:if="${inActivatingCourses == null or inActivatingCourses.isEmpty()}">
+            <td colspan="4" class="text-center text-muted">There is no courses here. The courses which are not assigned a teacher will appear here!</td>
+        </tr>
+        </tbody>
+    </table>
+
 </main>
 <div th:replace="~{/layout/base :: footer}"></div>
 </body>
