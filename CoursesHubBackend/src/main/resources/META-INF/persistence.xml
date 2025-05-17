@@ -13,12 +13,14 @@
     <class>com.courseshubbackend.pojos.Response</class>
     <class>com.courseshubbackend.pojos.ReviewComment</class>
     <class>com.courseshubbackend.pojos.Answer</class>
-    <class>com.courseshubbackend.pojos.Course</class>
+    <class>com.courseshubbackend.pojos.course.Course</class>
     <class>com.courseshubbackend.pojos.Message</class>
     <class>com.courseshubbackend.pojos.TestSubmission</class>
     <class>com.courseshubbackend.pojos.User</class>
     <class>com.courseshubbackend.pojos.Payment</class>
     <class>com.courseshubbackend.pojos.ReviewStar</class>
     <class>com.courseshubbackend.pojos.Certificate</class>
+    <class>com.courseshubbackend.pojos.Resource</class>
+    <class>com.courseshubbackend.pojos.Teacher</class>
   </persistence-unit>
 </persistence>
