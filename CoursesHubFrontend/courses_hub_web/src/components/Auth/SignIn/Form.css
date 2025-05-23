@@ -1,0 +1,27 @@
+.sub-title {
+    color: #9C9CA4;
+}
+
+.custom-input {
+  border: 2px solid rgba(156, 156, 164, 0.5);
+  transition: border-color 0.3s ease;
+}
+
+.custom-input:focus {
+  border-color: #f5c26b;
+  box-shadow: none;
+}
+
+.signin-button {
+    background-color: #FFBB54;
+    border: none;    
+    border-radius: 10px;
+}
+
+.forgot-password {
+    color: #9C9CA4;
+}
+
+.create-account {
+    color: #04A4F4;
+}
