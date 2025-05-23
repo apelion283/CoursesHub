@@ -4,6 +4,7 @@
  */
 package com.courseshubbackend.pojos;
 
+import com.courseshubbackend.pojos.course.Course;
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

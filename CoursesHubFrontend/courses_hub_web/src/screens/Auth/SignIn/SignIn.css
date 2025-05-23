@@ -1,0 +1,23 @@
+.signin-banner {
+  background-image: url('../../../assets/images/signin-banner.png');
+  background-size: cover;
+  background-position: center;
+  height: 50vh;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.signin-logo-link {
+  position: absolute;
+  top: 25%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.signin-form-card {
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  transform: translateX(-50%);
+}

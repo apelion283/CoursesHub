@@ -4,22 +4,12 @@
  */
 package com.courseshubbackend.pojos;
 
-import jakarta.persistence.Basic;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
-import jakarta.persistence.NamedQueries;
-import jakarta.persistence.NamedQuery;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
@@ -54,7 +44,6 @@ public class User implements Serializable {
     @Size(min = 1, max = 255)
     @Column(name = "full_name")
     private String fullName;
-    // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
@@ -90,7 +79,8 @@ public class User implements Serializable {
     private String address;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "created_date")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @Column(name = "created_date", updatable = false)
     @Temporal(TemporalType.DATE)
     private Date createdDate;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
@@ -111,6 +101,18 @@ public class User implements Serializable {
     private Set<ReviewComment> reviewCommentSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private Set<Conversation> conversationSet;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private Teacher teacher;
+
+    public Teacher getTeacher() {
+        return teacher;
+    }
+
+    public void setTeacher(Teacher teacher) {
+        this.teacher = teacher;
+    }
+
 
     public User() {
     }

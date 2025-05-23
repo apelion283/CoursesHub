@@ -1,5 +1,6 @@
 package com.courseshubbackend.pojos;
 
+import com.courseshubbackend.pojos.course.Course;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;

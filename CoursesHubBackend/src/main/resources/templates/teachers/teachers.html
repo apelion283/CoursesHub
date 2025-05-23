@@ -4,11 +4,55 @@
     <meta charset="UTF-8">
     <title>Teachers</title>
     <th:block th:replace="~{/layout/base :: styles}"></th:block>
+    <link rel="stylesheet" th:href="@{/css/teachers/teachers.css}"/>
+    <script th:src="@{/js/teachers/delete-teacher-dialog.js}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
 <div th:replace="~{/layout/base :: header}"></div>
+<h1 class="text-info text-center">Teachers Management</h1>
 <main class="container">
-    <h1 class="text-info text-center">Teachers Management</h1>
+    <a th:href="@{/teachers/add}" class="btn btn-success mt-2">Add a new Teacher</a>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th></th>
+            <th>Teacher FullName</th>
+            <th>Course Email</th>
+            <th>Teacher Gender</th>
+            <th>Phone Number</th>
+            <th>Average Rating</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="mt-4" th:each="t : ${teachers}" th:if="${teachers != null and !teachers.isEmpty()}">
+            <td><img class="img avatar" th:src="${t.avatarUrl}" alt="Teacher Avatar"/></td>
+            <td>
+                <a class="text-success text-decoration-none"
+                   th:text="${t.user.fullName}"
+                   th:href="@{'/teachers/' + ${t.id}}">
+                </a>
+            </td>
+            <td th:text="${t.user.email}"></td>
+            <td th:text="${t.user.gender ? 'Male' : 'Female'}"></td>
+            <td th:text="${t.user.phoneNumber}"></td>
+            <td th:text="${t.averageRating}"></td>
+            <td>
+                <button class="btn btn-danger" th:onclick="'deleteTeacher(\'' + @{/api/teachers} + '\', ' + ${t.id} + ', \'' + @{/teachers} + '\')'">
+                    <i class="fa-solid fa-trash"></i><strong> Delete</strong>
+                </button>
+                <a th:href="@{'/teachers/' + ${t.id}}" class="btn btn-success">
+                    <i class="fa-solid fa-pencil"></i><strong> Edit</strong>
+                </a>
+            </td>
+        </tr>
+
+        <tr th:if="${teachers == null or teachers.isEmpty()}">
+            <td colspan="4" class="text-center text-muted">There is no teacher here. Let's add a new teacher!</td>
+        </tr>
+        </tbody>
+    </table>
+
 </main>
 <div th:replace="~{/layout/base :: footer}"></div>
 </body>

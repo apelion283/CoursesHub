@@ -1,0 +1,29 @@
+.editor {
+    min-height: 200px;
+}
+
+.preview {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 200px;
+}
+
+.preview img, .preview video, .preview iframe {
+    max-width: 100%;
+    height: 150px;
+    object-fit: contain;
+}
+
+.thumbnail {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 100px;
+    height: 100px;
+    background-color: #ccc;
+}
+.thumbnail img {
+    max-width: 50%;
+    max-height: 50%;
+}

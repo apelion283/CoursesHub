@@ -1,0 +1,99 @@
+<template id="chapterTemplate">
+    <div class="chapter-block border rounded p-3 mb-3" data-index="__chapterIndex__">
+        <input type="hidden" name="chapterList[__chapterIndex__].id"/>
+        <input type="hidden" name="chapterList[__chapterIndex__].createdDate"/>
+        <div class="d-flex justify-content-between align-items-center">
+            <h5>Chapter <span class="chapterIndexText">__chapterIndexText__</span></h5>
+            <button class="btn btn-danger btn-sm" type="button" onclick="removeChapter(this)">
+                <i class="fas fa-trash"></i>
+            </button>
+        </div>
+        <div class="mb-2">
+            <label>Chapter name:</label>
+            <input type="text" class="form-control" name="chapterList[__chapterIndex__].name" required />
+        </div>
+        <div class="mb-2">
+            <label>Chapter description:</label>
+            <div class="form-control editor" id="chapter-__chapterIndex__-description-editor"></div>
+            <textarea id="chapter-__chapterIndex__-description" style="display:none;" name="chapterList[__chapterIndex__].description"></textarea>
+        </div>
+        <div class="mb-2">
+            <label>Chapter order:</label>
+            <input type="number" class="form-control" name="chapterList[__chapterIndex__].chapterOrder" min="1" readonly required/>
+        </div>
+
+        <!-- Lecture Container -->
+        <div class="border rounded p-2 mb-2 bg-light">
+            <div class="d-flex justify-content-between align-items-center">
+                <h5>Lecture management</h5>
+                <button class="btn btn-success btn-sm" type="button" onclick="addLecture(this)">
+                    <i class="fas fa-plus"></i> Thêm bài giảng
+                </button>
+            </div>
+            <div class="lecturesContainer"></div>
+        </div>
+
+        <!-- Resource Container -->
+        <div class="border rounded p-2 mb-2 bg-light">
+            <div class="d-flex justify-content-between align-items-center">
+                <h5>Resource Management</h5>
+                <button class="btn btn-success btn-sm" type="button" onclick="addResource(this)">
+                    <i class="fas fa-plus"></i> Thêm tài nguyên
+                </button>
+            </div>
+            <div class="resourcesContainer"></div>
+        </div>
+    </div>
+</template>
+
+<template id="lectureTemplate">
+    <div class="lecture-block border rounded p-2 mt-2">
+        <input type="hidden" name="chapterList[__chapterIndex__].lectureList[__lectureIndex__].id"/>
+        <input type="hidden" name="chapterList[__chapterIndex__].lectureList[__lectureIndex__].createdDate"/>
+        <div class="d-flex justify-content-between align-items-center">
+            <h6>Lecture <span class="lectureIndexText">__lectureIndexText__</span></h6>
+            <button class="btn btn-danger btn-sm" type="button" onclick="removeLecture(this)">
+                <i class="fas fa-trash"></i>
+            </button>
+        </div>
+        <div class="mb-2">
+            <label>Lecture name:</label>
+            <input type="text" class="form-control" name="chapterList[__chapterIndex__].lectureList[__lectureIndex__].name" required />
+        </div>
+        <div class="mb-2">
+            <label>Video:</label>
+            <input class="form-control" type="file" accept="video/*"
+                   name="chapterList[__chapterIndex__].lectureList[__lectureIndex__].videoFile"/>
+        </div>
+        <div class="mb-2">
+            <label>Document:</label>
+            <input class="form-control" type="file" accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx"
+                   name="chapterList[__chapterIndex__].lectureList[__lectureIndex__].documentFile"/>
+        </div>
+        <div class="mb-2">
+            <label>Lecture order:</label>
+            <input type="number" class="form-control" name="chapterList[__chapterIndex__].lectureList[__lectureIndex__].lectureOrder" readonly required />
+        </div>
+    </div>
+</template>
+
+<template id="resourceTemplate">
+    <div class="resource-block border rounded p-2 mt-2">
+        <input type="hidden" name="chapterList[__chapterIndex__].resourceList[__resourceIndex__].id"/>
+        <div class="d-flex justify-content-between align-items-center">
+            <h6>Resource <span class="resourceIndexText">__resourceIndexText__</span></h6>
+            <button class="btn btn-danger btn-sm" type="button" onclick="removeResource(this)">
+                <i class="fas fa-trash"></i>
+            </button>
+        </div>
+        <div class="mb-2">
+            <label>Resource name:</label>
+            <input type="text" class="form-control" name="chapterList[__chapterIndex__].resourceList[__resourceIndex__].name" required />
+        </div>
+        <div class="mb-2">
+            <label>URL/File:</label>
+            <input class="form-control" type="file"
+                   name="chapterList[__chapterIndex__].resourceList[__resourceIndex__].resourceFile"/>
+        </div>
+    </div>
+</template>
